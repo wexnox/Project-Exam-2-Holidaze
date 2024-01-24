@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import Navbar from './Navbar.jsx';
 
 export default function Header() {
     return (
@@ -14,6 +15,7 @@ export default function Header() {
             <div className="header__cart">
                 <Cart />
             </div>
+            <Navbar />
         </header>
     );
 }
