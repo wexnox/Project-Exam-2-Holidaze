@@ -1,31 +1,75 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth.js';
+import { useState } from 'react';
 
 const Navbar = () => {
+    const { isLoggedIn, logout } = useAuth();
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
+    function handleProfileMenu() {
+        setIsProfileMenuOpen(!isProfileMenuOpen);
+    }
+
     return (
-        <nav className="flex items-center justify-between flex-wrap bg-teal-500 p-6">
-            <div className="flex items-center flex-shrink-0 text-white mr-6">
-                <span className="font-semibold text-xl tracking-tight">Holidaze</span>
-            </div>
-            <div className="block lg:hidden">
-                <button className="flex items-center px-3 py-2 border rounded text-teal-200 border-teal-400 hover:text-white hover:border-white">
-                    <svg className="fill-current h-3 w-3" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <title>Menu</title>
-                        <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v15z" />
-                    </svg>
-                </button>
-            </div>
-            <div className="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
-                <div className="text-sm lg:flex-grow">
-                    <Link to="/" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-                        Home
-                    </Link>
-                    <Link to="/about" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-                        About
-                    </Link>
-                    <Link to="/contact" className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white">
-                        Contact
-                    </Link>
-                </div>
+        <nav className="bg-white shadow">
+            <div className="container mx-auto py-3">
+                <a className="navbar-brand text-2xl font-bold text-gray-800" href="/">
+                    Holidays
+                </a>
+
+                <ul className="flex justify-between items-center md:flex-grow">
+                    <li>
+                        <NavLink className="inline-flex py-2 px-4 text-sm font-medium text-gray-700 hover:text-gray-900" to="/venues">
+                            Venues
+                        </NavLink>
+                    </li>
+
+                    {isLoggedIn() && (
+                        <div className="relative">
+                            <button
+                                className="dropdown-toggle inline-flex py-2 px-4 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                                onClick={handleProfileMenu}
+                            >
+                                Profile
+                            </button>
+
+                            <ul
+                                className={`${isProfileMenuOpen ? 'block' : 'hidden'} absolute z-50 bottom-10 min-w-[8rem] max-w-[12rem] right-0 bg-gray-50 border border-gray-100 shadow-sm shadow-slate-200 rounded-md sm:top-8 sm:h-fit`}
+                                aria-labelledby="dropdown-menu-profile"
+                            >
+                                <li>
+                                    <NavLink className="dropdown-item" to="/profile">
+                                        View Profile
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink className="dropdown-item" to="/edit-profile">
+                                        Edit Profile
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <button className="dropdown-item" onClick={() => logout()}>
+                                        Logout
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    )}
+                    {!isLoggedIn() && (
+                        <div>
+                            <NavLink className="inline-flex py-2 px-4 text-sm font-medium text-gray-700 hover:text-gray-900" to="/register">
+                                Register
+                            </NavLink>
+                            <li>
+                                <NavLink className="inline-flex py-2 px-4 text-sm font-medium text-gray-700 hover:text-gray-900" to="/login">
+                                    Login
+                                </NavLink>
+                            </li>
+                        </div>
+                    )}
+                </ul>
             </div>
         </nav>
     );

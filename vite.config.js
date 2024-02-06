@@ -2,8 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import autoprefixer from 'autoprefixer';
 import eslintPlugin from 'vite-plugin-eslint';
+import tailwindcss from 'tailwindcss';
 
 // https://vitejs.dev/config/
+// https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md
 export default defineConfig({
     plugins: [
         react(),
@@ -25,7 +27,7 @@ export default defineConfig({
     // },
     css: {
         postcss: {
-            plugins: [autoprefixer({})],
+            plugins: [autoprefixer({}), tailwindcss()],
         },
     },
     build: {

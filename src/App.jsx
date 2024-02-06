@@ -1,17 +1,31 @@
-import './App.css';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout/Layout.jsx';
-import Home from './pages/Home.jsx';
+import { Route, Routes } from 'react-router-dom';
+import Layout from './components/Layout/Layout';
+import Home from './pages/Home';
+import Login from './components/Login.jsx';
+import Registration from './components/Registration.jsx';
 
 function App() {
     return (
-        <BrowserRouter>
+        <>
             <Routes>
-                <Route path="/" element={<Layout />} />
-                <Route index element={<Home />} />
-                <Route path="*" element={<h1>Page not found</h1>} />
+                <Route path="/" element={<Layout />}>
+                    <Route index element={<Home />} />
+
+                    {/*<Route path="profile" element={<Profile />} />*/}
+
+                    {/*<Route path="accommodation" element={<Accommodation />} />*/}
+                    {/*<Route path="accommodation/:slug" element={<Accommodation />} />*/}
+
+                    {/*<Route path="about" element={<About />} />*/}
+                    {/*<Route path="contact" element={<Contact />} />*/}
+
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Registration />} />
+
+                    {/*<Route path="*" element={<NoMatch />} />*/}
+                </Route>
             </Routes>
-        </BrowserRouter>
+        </>
     );
 }
 
