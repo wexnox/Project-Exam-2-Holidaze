@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import { useState } from 'react';
 
 const schema = yup.object().shape({
     email: yup
@@ -20,11 +21,16 @@ const Login = () => {
         resolver: yupResolver(schema),
     });
 
+    const [serverError, setServerError] = useState('');
+
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('/api/login', data);
+            localStorage.setItem('token', response.data.token);
+            window.location.href = '/profile';
             console.log(response.data);
         } catch (error) {
+            setServerError(error.response.data.error);
             console.error(error.response);
         }
     };
@@ -56,6 +62,7 @@ const Login = () => {
                 />
                 {errors.password && <p className="text-red-500">{errors.password.message}</p>}
             </div>
+            {serverError && <p className="text-red-500">{serverError}</p>}
             <button type="submit" className="bg-blue-500 text-white p-3 rounded">
                 Login
             </button>

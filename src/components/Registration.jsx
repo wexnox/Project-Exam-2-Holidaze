@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
+import { useState } from 'react';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -26,11 +27,16 @@ const Register = () => {
         resolver: yupResolver(schema),
     });
 
+    const [serverError, setServerError] = useState('');
     const onSubmit = async (data) => {
         try {
             const response = await axios.post('/api/register', data);
+
+            // TODO:  redirect if ok
+            window.location.href = '/profile';
             console.log(response.data);
         } catch (error) {
+            setServerError(error.response.data.error);
             console.error(error.response);
         }
     };
@@ -66,6 +72,7 @@ const Register = () => {
                 <input id="confirmPassword" type="password" className="w-full p-2 border border-gray-300 rounded" {...register('confirmPassword')} />
                 {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
             </div>
+            {serverError && <p className="text-red-500">{serverError}</p>}
             <button type="submit" className="bg-blue-500 text-white p-3 rounded">
                 Register
             </button>
