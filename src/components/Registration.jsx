@@ -3,6 +3,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useState } from 'react';
+import { API_REGISTER } from '../js/utils/Api/api.js';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -30,7 +31,7 @@ const Register = () => {
     const [serverError, setServerError] = useState('');
     const onSubmit = async (data) => {
         try {
-            const response = await axios.post('/api/register', data);
+            const response = await axios.post(API_REGISTER, data);
 
             // TODO:  redirect if ok
             window.location.href = '/profile';
