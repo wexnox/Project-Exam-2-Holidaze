@@ -3,6 +3,7 @@ module.exports = {
     env: {
         browser: true,
         es2020: true,
+        node: true,
     },
     extends: [
         'eslint:recommended',
@@ -15,9 +16,18 @@ module.exports = {
             env: {
                 node: true,
             },
-            files: ['.eslintrc.{js,cjs}'],
+            files: ['**/*.jsx'],
+            parser: '@babel/eslint-parser',
             parserOptions: {
-                sourceType: 'script',
+                requireConfigFile: false,
+                ecmaVersion: 2018,
+                sourceType: 'module',
+                ecmaFeatures: {
+                    jsx: true,
+                },
+                babelOptions: {
+                    presets: ['@babel/preset-react'],
+                },
             },
         },
     ],
@@ -25,28 +35,35 @@ module.exports = {
     ignorePatterns: [
         'dist',
         '.eslintrc.cjs',
+        'src/main.jsx',
     ],
+    parser: '@babel/eslint-parser',
     parserOptions: {
-        ecmaVersion: 'latest',
+        requireConfigFile: false,
+        ecmaVersion: '2018',
         sourceType: 'module',
         ecmaFeatures: {
             jsx: true,
         },
+        babelOptions: {
+            presets: ['@babel/preset-react'],
+        },
     },
     settings: {
         react: {
-            version: '18.2',
+            version: 'detect',
         },
     },
     plugins: [
-        'react-refresh',
+        'react',
         'prettier',
+        'react-refresh',
     ],
     rules: {
-        'prettier/prettier': 'error',
-        'react-refresh/only-export-components': [
-            'warn',
-            { allowConstantExport: true },
-        ],
+        'no-unused-vars': 'off',
+        'react/prop-types': 'error',
+        'prettier/prettier': 'off',
+        'react/react-in-jsx-scope': 'off',
     },
+
 };
