@@ -4,9 +4,6 @@ import reactRefresh from '@vitejs/plugin-react-refresh';
 import autoprefixer from 'autoprefixer';
 import eslintPlugin from 'vite-plugin-eslint';
 import tailwindcss from 'tailwindcss';
-import dotenv from 'dotenv';
-
-dotenv.config(); // Load environment variables from .env
 
 // Function to safely access environment variables
 const getEnvVar = (key, fallback = '') => JSON.stringify(process.env[key] || fallback);
