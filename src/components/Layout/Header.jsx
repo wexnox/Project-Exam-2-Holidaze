@@ -1,9 +1,12 @@
-import Navbar from './Navbar.jsx';
+import React from 'react';
+import Navbar from './Navbar';
 
-export default function Header() {
+const Header = () => {
     return (
-        <header className="header">
-            <Navbar />
-        </header>
+
+        <Navbar />
+
     );
-}
+};
+
+export default Header;
