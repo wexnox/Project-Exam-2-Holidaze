@@ -2,8 +2,11 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { useState } from 'react';
-import { API_REGISTER } from '../js/utils/Api/api.js';
+import { useContext, useState } from 'react';
+import { API_REGISTER } from '../js/utils/Api/constants.js';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from './context/AuthContext.jsx';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -20,6 +23,8 @@ const schema = yup.object().shape({
 });
 
 const Register = () => {
+    const { auth, setAuth } = useContext(AuthContext);
+
     const {
         register,
         handleSubmit,
@@ -29,16 +34,21 @@ const Register = () => {
     });
 
     const [serverError, setServerError] = useState('');
+    const navigate = useNavigate();
     const onSubmit = async (data) => {
         try {
             const response = await axios.post(API_REGISTER, data);
-
-            // TODO:  redirect if ok
-            window.location.href = '/profile';
+            localStorage.setItem('token', response.data.token);
+            setAuth(response.data.token);
+            navigate('/profile');
             console.log(response.data);
         } catch (error) {
-            setServerError(error.response.data.error);
             console.error(error.response);
+            if (error.response.data.errors) {
+                setServerError(error.response.data.errors[0]); // Adjust this line as per your requirements.
+            } else {
+                setServerError('An error occurred while trying to register.');
+            }
         }
     };
 
@@ -49,28 +59,32 @@ const Register = () => {
                 <label htmlFor="name" className="block mb-1">
                     Name
                 </label>
-                <input id="name" type="text" className="w-full p-2 border border-gray-300 rounded" {...register('name')} />
+                <input id="name" type="text"
+                       className="w-full p-2 border border-gray-300 rounded" {...register('name')} />
                 {errors.name && <p className="text-red-500">{errors.name.message}</p>}
             </div>
             <div className="mb-4">
                 <label htmlFor="email" className="block mb-1">
                     Email
                 </label>
-                <input id="email" type="email" className="w-full p-2 border border-gray-300 rounded" {...register('email')} />
+                <input id="email" type="email"
+                       className="w-full p-2 border border-gray-300 rounded" {...register('email')} />
                 {errors.email && <p className="text-red-500">{errors.email.message}</p>}
             </div>
             <div className="mb-4">
                 <label htmlFor="password" className="block mb-1">
                     Password
                 </label>
-                <input id="password" type="password" className="w-full p-2 border border-gray-300 rounded" {...register('password')} />
+                <input id="password" type="password"
+                       className="w-full p-2 border border-gray-300 rounded" {...register('password')} />
                 {errors.password && <p className="text-red-500">{errors.password.message}</p>}
             </div>
             <div className="mb-4">
                 <label htmlFor="confirmPassword" className="block mb-1">
                     Confirm Password
                 </label>
-                <input id="confirmPassword" type="password" className="w-full p-2 border border-gray-300 rounded" {...register('confirmPassword')} />
+                <input id="confirmPassword" type="password"
+                       className="w-full p-2 border border-gray-300 rounded" {...register('confirmPassword')} />
                 {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
             </div>
             {serverError && <p className="text-red-500">{serverError}</p>}
