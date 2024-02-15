@@ -14,7 +14,7 @@ export function getApiClient(accessToken) {
         },
     });
 
-    // AXIOS REQUEST INTERCEPTOR
+
     instance.interceptors.request.use(function(config) {
         // Do something before request is sent
         if (!(config.data instanceof FormData)) {
@@ -35,11 +35,17 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
     try {
         setIsLoading(true);
         setIsError(false);
+        console.log('About to make request', url, method, data);
         const response = await apiClient.request({
             url: url,
             method: method,
             data: data,
         });
+        console.log('Received response', response);
+        if (response instanceof Error) {
+            // handle error here
+            console.error(response.message);
+        }
         if (response.status === 204) {
             setIsDeleted((prevDeleted) => prevDeleted + 1);
         } else {
@@ -47,8 +53,10 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
             setCreated(true);
         }
     } catch (error) {
+        console.log('Caught an error during request', error);
         setIsError(true);
-        setErrorMsg('An error occurred during the HTTP request');
+        setErrorMsg('An error occurred during the HTTP request: ' + error.message);
+        return error;
     } finally {
         setIsLoading(false);
     }
