@@ -2,16 +2,31 @@ import axios from 'axios';
 import { useCallback, useState, useMemo, useContext } from 'react';
 import { AuthContext } from '../../../components/context/AuthContext.jsx';
 import { API_BASE_URL } from './constants.js';
+import { getLocalStorage } from '../storage/storage.mjs';
 
-export function getApiClient(auth) {
+const { accessToken } = getLocalStorage('user');
 
-    return axios.create({
+export function getApiClient(accessToken) {
+    const instance = axios.create({
         baseURL: API_BASE_URL,
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${auth}`,
+            Authorization: `Bearer ${accessToken}`,
         },
     });
+
+    // AXIOS REQUEST INTERCEPTOR
+    instance.interceptors.request.use(function(config) {
+        // Do something before request is sent
+        if (!(config.data instanceof FormData)) {
+            config.headers['Content-Type'] = 'application/json';
+        }
+        return config;
+    }, function(error) {
+        // Do something with request error
+        return Promise.reject(error);
+    });
+
+    return instance;
 }
 
 async function ApiFetchCall(url, method, data, handlers, apiClient) {
@@ -39,9 +54,9 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
     }
 }
 
-export const useApi = () => {
+export const useApi = (accessToken) => {
     const [auth] = useContext(AuthContext);
-    const apiClient = useMemo(() => getApiClient(auth), [auth]);
+    const apiClient = useMemo(() => getApiClient(accessToken), [accessToken]);
 
     const [apiState, setApiState] = useState({
         data: [],
