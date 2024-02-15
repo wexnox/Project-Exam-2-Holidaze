@@ -15,8 +15,8 @@ export default function NotFound() {
             <h1 className="font-bold text-4xl mb-2">{CONSTANTS.PAGE_NOT_FOUND}</h1>
             <p className="mb-6 text-lg">{CONSTANTS.PAGE_DOES_NOT_EXIST}</p>
             <p className="mb-6 text-sm px-10 text-center">{CONSTANTS.PAGE_DESCRIPTION}</p>
-            <p className="text-base">{CONSTANTS.REDIRECTION_TEXT} <Link className="text-blue-500 hover:text-blue-700"
-                                                                        to="/">{CONSTANTS.HOME_LINK}</Link></p>
+            <p className="text-base">{CONSTANTS.REDIRECTION_TEXT}
+                <Link className="text-blue-500 hover:text-blue-700" to="/">{CONSTANTS.HOME_LINK}</Link></p>
         </div>
     );
 }
