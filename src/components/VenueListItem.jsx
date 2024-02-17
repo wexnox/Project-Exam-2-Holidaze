@@ -8,7 +8,7 @@ const VenueListItem = ({ id, name, media, maxGuests, price }) => {
     return (
         <Link key={id} to={`/venues/venue-details/${id}`}>
             <img loading={'lazy'}
-                 className={'rounded-t-2xl object-cover h-80 w-full shadow-slate-900 shadow-2xl md:h-64'} alt={altText}
+                 className={'rounded-t-2xl shadow-slate-900 shadow-2xl object-cover h-80 w-full md:h-64'} alt={altText}
                  src={firstImage} />
             <div className={'flex flex-col gap-2 mt-10 text-center'}>
                 <h3 className={'text-lg text-ellipsis font-bold whitespace-pre-line capitalize border-b-2 overflow-hidden '}>{name}</h3>
@@ -18,7 +18,8 @@ const VenueListItem = ({ id, name, media, maxGuests, price }) => {
                 </p>
             </div>
             <button
-                className={'bg-slate-300 text-white rounded-b-2xl h-10 w-full mt-4 group-hover:bg-slate-800 ease-out duration-200'}>View
+
+                className={'bg-slate-400 text-white rounded rounded-b-2xl h-10 w-full mt-4 disabled:hover:cursor-none hover:bg-slate-700 hover:scale-105 group-hover:bg-slate-700 ease-out duration-200'}>View
                 details
             </button>
         </Link>
