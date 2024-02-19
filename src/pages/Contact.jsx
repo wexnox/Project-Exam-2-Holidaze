@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -31,6 +31,11 @@ ErrorMessage.propTypes = {
 };
 
 export default function Contact() {
+
+    useEffect(() => {
+        document.title = 'Holidaze | Contact';
+    }, []);
+
     const { handleSubmit, control, errors, onSubmit } = useContactForm();
 
     return (
@@ -94,7 +99,7 @@ export default function Contact() {
                                 Submit
                             </button>
                         </div>
- 
+
                     </div>
                 </form>
             </div>

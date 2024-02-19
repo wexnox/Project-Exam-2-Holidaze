@@ -73,6 +73,10 @@ function Profile() {
 
     useProfile(navigate, setAuth, isError, setIsFormError, avatarErrorRef, avatarSubmitButtonRef, accessToken, data);
 
+    useEffect(() => {
+        document.title = 'Holidaze | Profile';
+    }, []);
+
     return (
         <section className="text-slate-600 body-font relative">
             <div className="container px-5 py-24 mx-auto">

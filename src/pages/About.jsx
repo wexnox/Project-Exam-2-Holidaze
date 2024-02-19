@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const About = () => {
+
+    useEffect(() => {
+        document.title = 'Holidaze | About';
+    }, []);
+
     return (
         <section className="text-gray-600 body-font relative">
             <div className="container px-5 py-24 mx-auto">
