@@ -14,7 +14,6 @@ export function getApiClient(accessToken) {
         },
     });
 
-    // AXIOS REQUEST INTERCEPTOR
     instance.interceptors.request.use(function(config) {
         // Do something before request is sent
         if (!(config.data instanceof FormData)) {
@@ -35,23 +34,51 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
     try {
         setIsLoading(true);
         setIsError(false);
+        // console.log('About to make request', url, method, data);
+        // if (data === undefined) {
+        //     console.error('Data is undefined');
+        // } else
+
+        // if (method !== 'GET') console.log('About to make request', url, method, data);
         const response = await apiClient.request({
             url: url,
             method: method,
             data: data,
         });
+
+        // if (method === 'GET') {
+        //     console.log(`About to make GET request to URL: ${url}`);
+        // } else {
+        //     console.log(`About to make ${method} request to URL: ${url} with data: `, data);
+        // }
+
+        if (response.status >= 200 && response.status < 300) {
+            // console.log('Server responded with success, response data is: ', response.data);
+            // continue handling your response here e.g. setData(response.data)..
+        } else {
+            // console.error(response.message);
+        }
+        // console.log('Received response', response);
+        if (response instanceof Error) {
+            // handle error here
+            // console.error(response.message);
+        }
         if (response.status === 204) {
             setIsDeleted((prevDeleted) => prevDeleted + 1);
         } else {
             setData(response.data);
             setCreated(true);
         }
+
     } catch (error) {
+        // console.log('Caught an error during request', error);
         setIsError(true);
-        setErrorMsg('An error occurred during the HTTP request');
+        setErrorMsg('An error occurred during the HTTP request: ' + error.message);
+        return error;
     } finally {
         setIsLoading(false);
     }
+
 }
 
 export const useApi = (accessToken) => {

@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import Breadcrumbs from '../Breadcrumbs.jsx';
 
 const Navbar = () => {
     const [searchValue, setSearchValue] = useState('');
@@ -148,6 +149,7 @@ const Navbar = () => {
                     {!auth && renderNavLink('/login', 'Login')}
                 </ul>
             </div>
+            {/*<Breadcrumbs />*/}
         </nav>
     );
 };

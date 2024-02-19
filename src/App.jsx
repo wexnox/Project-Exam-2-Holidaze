@@ -12,6 +12,7 @@ import Profile from './pages/Profile.jsx';
 import About from './pages/About.jsx';
 import Contact from './pages/Contact.jsx';
 import Search from './pages/Search.jsx';
+// import ThemeSwitcher from './js/ThemeSwitcher';
 
 // TODO: Convert to 6* routes. createBrowserRouter(createRoutesFromElements())
 function App() {
@@ -19,6 +20,7 @@ function App() {
     return (
         <>
             <Routes>
+                {/*<div className="flex justify-center items-center h-screen">*/}
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
 
@@ -36,6 +38,8 @@ function App() {
 
                     <Route path="*" element={<NotFound />} />
                 </Route>
+                {/*<ThemeSwitcher />*/}
+                {/*</div>*/}
             </Routes>
         </>
     );
