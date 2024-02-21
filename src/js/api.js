@@ -1,12 +1,24 @@
 import axios from 'axios';
 import { useCallback, useState, useMemo, useContext } from 'react';
-import { AuthContext } from '../../../components/context/AuthContext.jsx';
+import { AuthContext } from '../components/context/AuthContext.jsx';
 import { API_BASE_URL } from './constants.js';
-import { getLocalStorage } from '../storage/storage.mjs';
+import { getLocalStorage } from './storage.mjs';
 
-const { accessToken } = getLocalStorage('user');
+function isValidToken(accessToken) {
+    if (typeof accessToken !== 'string') {
+        console.error('Invalid token: Token must be a string.');
+        return false;
+    }
+    const parts = accessToken.split('.');
+    return parts.length === 3;
+}
 
 export function getApiClient(accessToken) {
+    if (!isValidToken(accessToken)) {
+        console.error('Invalid access token format:', accessToken);
+        // TODO: Consider more error handling here, like refreshing the token or redirecting to login
+        return null;
+    }
     const instance = axios.create({
         baseURL: API_BASE_URL,
         headers: {
@@ -15,6 +27,7 @@ export function getApiClient(accessToken) {
     });
 
     instance.interceptors.request.use(function(config) {
+        console.log(`Making request to ${config.url} with accessToken:`, config.headers.Authorization);
         // Do something before request is sent
         if (!(config.data instanceof FormData)) {
             config.headers['Content-Type'] = 'application/json';
@@ -34,23 +47,12 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
     try {
         setIsLoading(true);
         setIsError(false);
-        // console.log('About to make request', url, method, data);
-        // if (data === undefined) {
-        //     console.error('Data is undefined');
-        // } else
 
-        // if (method !== 'GET') console.log('About to make request', url, method, data);
         const response = await apiClient.request({
             url: url,
             method: method,
             data: data,
         });
-
-        // if (method === 'GET') {
-        //     console.log(`About to make GET request to URL: ${url}`);
-        // } else {
-        //     console.log(`About to make ${method} request to URL: ${url} with data: `, data);
-        // }
 
         if (response.status >= 200 && response.status < 300) {
             // console.log('Server responded with success, response data is: ', response.data);
@@ -58,7 +60,7 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
         } else {
             // console.error(response.message);
         }
-        // console.log('Received response', response);
+        console.log('Received response', response);
         if (response instanceof Error) {
             // handle error here
             // console.error(response.message);
@@ -72,8 +74,15 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
 
     } catch (error) {
         // console.log('Caught an error during request', error);
-        setIsError(true);
-        setErrorMsg('An error occurred during the HTTP request: ' + error.message);
+        // setIsError(true);
+        // setErrorMsg('An error occurred during the HTTP request: ' + error.message);
+        if (error.response && error.response.status === 401) {
+            // Handle unauthorized error, e.g., refresh token or redirect to login
+            console.error('Unauthorized request, need to refresh token or login again.');
+        } else {
+            setIsError(true);
+            setErrorMsg('An error occurred during the HTTP request: ' + error.message);
+        }
         return error;
     } finally {
         setIsLoading(false);
@@ -81,9 +90,18 @@ async function ApiFetchCall(url, method, data, handlers, apiClient) {
 
 }
 
-export const useApi = (accessToken) => {
+export const useApi = () => {
+
+
+    // const { accessToken } = getLocalStorage('user');
+// Add this line to check the retrieved token
+
+    const { accessToken } = useContext(AuthContext);
     const [auth] = useContext(AuthContext);
+    console.log('Retrieved accessToken:', accessToken); // Debug log to check the retrieved token
     const apiClient = useMemo(() => getApiClient(accessToken), [accessToken]);
+    // console.log('Retrieved accessToken:', accessToken);
+    // console.log('Passing accessToken to getApiClient:', accessToken); // Add this to check the passed token
 
     const [apiState, setApiState] = useState({
         data: [],
