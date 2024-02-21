@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ArrowIcon from '../components/ArrowIcon';
-import { handleImageError } from '../js/utils/validation.js';
+import { handleImageError } from '../js/validation.js';
 
 const getNextSlideIndex = (current, direction, length) => {
     let slideIndex = current + direction;
