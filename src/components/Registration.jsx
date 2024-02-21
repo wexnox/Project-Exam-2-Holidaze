@@ -3,39 +3,33 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useContext, useState } from 'react';
-import { API_REGISTER } from '../js/utils/Api/constants.js';
+import { API_REGISTER } from '../js/constants.js';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext.jsx';
+import { useApi } from '../js/api.js';
+import { getValidationSchema } from '../js/validation.js';
 
-const schema = yup.object().shape({
-    name: yup.string().required(),
-    email: yup
-        .string()
-        .email()
-        .required()
-        .matches(/.*@stud\.noroff\.no$/, 'Must be a stud.noroff.no email'),
-    password: yup.string().min(8).required(),
-    confirmPassword: yup
-        .string()
-        .oneOf([yup.ref('password'), null], 'Passwords must match')
-        .required(),
-});
 
 const Register = () => {
     const { auth, setAuth } = useContext(AuthContext);
+    const [isVenueManager, setIsVenueManager] = useState(false);
+
+    const { data: response, isLoading, isError, errorMsg, fetchData } = useApi();
 
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(getValidationSchema),
     });
 
     const [serverError, setServerError] = useState('');
     const navigate = useNavigate();
+
     const onSubmit = async (data) => {
+
         try {
             const response = await axios.post(API_REGISTER, data);
             localStorage.setItem('token', response.data.token);
@@ -51,6 +45,17 @@ const Register = () => {
             }
         }
     };
+
+    const useSubmit = (data) => {
+        const body = data;
+        body.venueManager = isVenueManager;
+
+        fetchData(API_REGISTER, 'POST', null, body);
+    };
+
+    function handleVenueManager() {
+        setIsVenueManager(!isVenueManager);
+    }
 
     return (
         <form className="container mx-auto max-w-md mt-10" onSubmit={handleSubmit(onSubmit)}>
@@ -86,6 +91,12 @@ const Register = () => {
                 <input id="confirmPassword" type="password"
                        className="w-full p-2 border border-gray-300 rounded" {...register('confirmPassword')} />
                 {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
+            </div>
+            <div className={'flex items-center gap-2 mt-3'}>
+                <label htmlFor={'venue-manager'} className={'select-none'}>
+                    I am a Venue manager
+                </label>
+                <input id={'venue-manager'} type={'checkbox'} onChange={handleVenueManager} />
             </div>
             {serverError && <p className="text-red-500">{serverError}</p>}
             <button type="submit" className="bg-blue-500 text-white p-3 rounded">
