@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { createContext, useState } from 'react';
-import { useApi } from '../../js/utils/Api/api.js';
+import { useApi } from '../../js/api.js';
 import PropTypes from 'prop-types';
 
 const SettingsContext = createContext([null, () => {
