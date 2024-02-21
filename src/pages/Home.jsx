@@ -1,7 +1,7 @@
 import { useEffect, useContext } from 'react';
-import { API_VENUES } from '../js/utils/Api/constants.js';
+import { API_VENUES } from '../js/constants.js';
 import VenueListItem from '../components/VenueListItem.jsx';
-import { getValidVenues } from '../js/utils/validation.js';
+import { getValidVenues } from '../js/validation.js';
 import { SettingsContext } from '../components/context/SettingsContext.jsx';
 import PropTypes from 'prop-types';
 import React from 'react';
