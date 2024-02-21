@@ -1,25 +1,16 @@
-import { API_BOOKING } from './utils/Api/constants.js';
+import { API_BOOKING } from './constants.js';
+import { useApi } from './api.js';
 
-export function handleSubmit(e, auth, owner, startDate, endDate, guests, venueId, fetchBooking, setIsVenueOwnedByUSer) {
-    e.preventDefault();
 
-    if (auth && owner && auth.name !== owner.name) {
-        const body = {
-            dateFrom: startDate.toISOString(),
-            dateTo: endDate.toISOString(),
-            guests: guests,
-            venueId: venueId,
-        };
-        // console.log('StartDate in VenueDetails: ', startDate);
-        fetchBooking(API_BOOKING, 'POST', auth.accessToken, body);
-    } else if (auth && owner && auth.name === owner.name) {
-        setIsVenueOwnedByUSer(true);
-    }
-}
-
+/**
+ * Handles the guest increment and decrement based on the event and updates the guest count using the provided setter function.
+ *
+ * @param {Object} e - The event object triggered by the user action.
+ * @param {number} guests - The current guest count.
+ * @param {function} setGuests - The setter function to update the guest count.
+ * @return {void}
+ */
 export function handleGuests(e, guests, setGuests) {
-    // console.log('Guests in Helper: ', guests);
-    // console.log('setGuests in Helper: ', setGuests);
     const id = e.currentTarget.id;
     switch (id) {
         case 'guest-increment':
@@ -31,15 +22,26 @@ export function handleGuests(e, guests, setGuests) {
     }
 }
 
-export function onChange(dates, startDate, setStartDate, setMaxDate, setEndDate, bookingsArray) {
-    // console.log('StartDate in Helper: ', startDate);
-    // console.log('setStartDate in Helper: ', setStartDate);
+/**
+ * Function to handle changes in dates.
+ * Sets the start date, checks for bookings and sets the maximum date, and sets the end date.
+ *
+ * @param {Array<Date>} dates - The array of selected dates.
+ * @param {Date} startDate - The current start date.
+ * @param {function} setMaxDate - The function to set the maximum date.
+ * @param {Date} endDate - The current end date.
+ * @param {Array<Object>} bookingsArray - The array of bookings.
+ * @param {function} setStartDate - The function to set the start date.
+ * @param {function} setEndDate - The function to set the end date.
+ * @return {void}
+ */
+export function onChange(dates, startDate, setMaxDate, endDate, bookingsArray, setStartDate, setEndDate) {
     const [start, end] = dates;
     setStartDate(start);
 
     if (bookingsArray.length > 0) {
         for (let i = 0; i < bookingsArray.length; i++) {
-            if (start < bookingsArray[i].start) {
+            if (bookingsArray[i] && start < bookingsArray[i].start) {
                 setMaxDate(bookingsArray[i].start);
                 break;
             }
