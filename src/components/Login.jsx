@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthContext } from './context/AuthContext.jsx';
 import * as yup from 'yup';
 import axios from 'axios';
-import { API_LOGIN } from '../js/utils/Api/constants.js';
+import { API_LOGIN } from '../js/constants.js';
 import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
