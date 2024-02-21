@@ -2,6 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import About from '../../pages/About.jsx';
 
+/**
+ * Represents the footer component of the website.
+ * @constructor
+ * @return {JSX.Element} The rendered footer component.
+ */
 const Footer = () => {
     return (
         <footer className="bg-teal-500 text-white py-8">
