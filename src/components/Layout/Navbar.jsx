@@ -5,6 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Breadcrumbs from '../Breadcrumbs.jsx';
 
+
+/**
+ * Handles the search functionality.
+ *
+ * @returns {boolean} Returns true if navigation has occurred, otherwise false.
+ */
 const Navbar = () => {
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
@@ -13,7 +19,11 @@ const Navbar = () => {
     const profileMenuRef = useRef(null);
     const [isNavVisible, setIsNavVisible] = useState(false);
 
-    // search
+    /**
+     * Handles the search functionality.
+     *
+     * @returns {boolean} Returns true if navigation has occurred, otherwise false.
+     */
     function handleSearch() {
         const trimmedSearchValue = searchValue.trim();
         if (trimmedSearchValue) {
@@ -23,19 +33,46 @@ const Navbar = () => {
         return false;   // No navigation
     }
 
+    /**
+     * Handles the key press event for the search input field.
+     *
+     * @param {Event} e - The key press event object.
+     * @return {void}
+     */
     function handleSearchEnterPress(e) {
         if (e.key === 'Enter') {
             handleSearch();
         }
     }
 
-    // profile menu
-    const handleProfileMenu = useCallback(
-        () => setIsProfileMenuOpen((prevState) => !prevState),
-        [],
-    );
+
+    /**
+     * Handles the profile menu functionality.
+     * Toggles the isProfileMenuOpen state.
+     *
+     * @callback handleProfileMenu
+     * @return {void}
+     */
+    const handleProfileMenu = useCallback(() => {
+        setIsProfileMenuOpen((prevState) => !prevState);
+    }, [isProfileMenuOpen]);
 
 
+    useEffect(() => {
+        if (isProfileMenuOpen) {
+            const firstElement = profileMenuRef.current?.querySelector('a, button');
+            firstElement && firstElement.focus();
+        }
+    }, [isProfileMenuOpen]);
+
+    /**
+     * Handles click events outside of the profile menu.
+     * If the click event target is not within the profileMenuRef element,
+     * the isProfileMenuOpen state is set to false.
+     *
+     * @param {Event} event - The click event object.
+     * @returns {void}
+     */
     useEffect(() => {
         const handleClickOutside = event => {
             if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
@@ -49,15 +86,40 @@ const Navbar = () => {
         };
     }, []);
 
-    // Logout
+
+    /**
+     * Function to handle user logout
+     *
+     * @function
+     * @name logout
+     * @memberof module:authentication
+     * @return {void}
+     *
+     * @example
+     * // Usage
+     * logout();
+     *
+     * @description
+     * This function is used to log out the user. It removes the user's token and user information
+     * from the local storage, sets the authentication state to null, closes the profile menu,
+     * and navigates the user to the home page.
+     */
     const logout = useCallback(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setAuth(null);
         setIsProfileMenuOpen(false);
         navigate('/');
+        // Focus back to the menu button after logout
+        document.getElementById('menu-button').focus();
     }, [setAuth, setIsProfileMenuOpen, navigate]);
 
+    /**
+     * Retrieves the user object stored in the browser's localStorage.
+     *
+     * @returns {object} The user object stored in localStorage.
+     */
+    // Check for auth on component mount
     useEffect(() => {
         const user = localStorage.getItem('user');
         if (user) {
@@ -65,6 +127,7 @@ const Navbar = () => {
         }
     }, [setAuth]);
 
+    // Render NavLink helper function
     const renderNavLink = (to, text) => (
         <div className={`lg:inline ${isNavVisible ? 'inline' : 'hidden'}`}>
             <li>
@@ -79,19 +142,23 @@ const Navbar = () => {
     );
 
     return (
-        <nav className="bg-white">
-            <div className="container mx-auto py-3">
-                <div className="md:hidden lg:hidden absolute right-0 m-4">
-                    <button onClick={() => setIsNavVisible(!isNavVisible)}>
-                        <RxHamburgerMenu size={30} />
-                    </button>
-                </div>
+        <nav className="bg-white shadow-md z-50">
+            <div className="container mx-auto py-3 flex items-center justify-between">
 
-                <Link to="/" className="navbar-brand text-2xl font-bold text-slate-600">Holidays</Link>
-                <div id={'search'}
-                     className={'w-full bg-white h-[72px] flex items-center mx-auto sm:static sm:max-w-[600px] lg:ml-[70px]'}>
-                    <div className={'container mx-auto px-4 lg:p-0 '}>
-                        <div className={'flex gap-2 max-w-[600px]'}>
+                {/* Holidays Link and Hamburger Menu */}
+                <div className="flex items-center"> {/* New flex container for left-aligned items */}
+                    <Link to="/" className="navbar-brand text-2xl font-bold text-slate-600 mr-4">Holidays</Link>
+                    <div className="md:hidden lg:hidden">
+                        <button onClick={() => setIsNavVisible(!isNavVisible)}>
+                            <RxHamburgerMenu size={30} />
+                        </button>
+                    </div>
+                </div>
+                {/* Search Input */}
+                <div className="flex-grow px-4">
+                    <div className={'mx-auto px-4 lg:p-0 '}>
+
+                        <div className="flex gap-2 max-w-[600px]">
                             <label className={'w-full relative'}>
                                 <input aria-label={'Search for venues'}
                                        className={'border-gray-200 border rounded h-10 indent-4 w-full font-light placeholder:text-zinc-400 placeholder:font-normal'}
@@ -125,26 +192,44 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                <ul className={`flex justify-between items-center ${isNavVisible ? 'block' : 'hidden'} md:flex`}>
+                {/* Right Section: Profile and Navigation Links */}
+                <ul className={`flex items-center ${isNavVisible ? 'block' : 'hidden'} md:flex`}>
                     {renderNavLink('/venues', 'Venues')}
-                    {/*{renderNavLink('/about', 'About')}*/}
-                    {/*{renderNavLink('/contact', 'Contact')}*/}
-                    {auth && <button
-                        className="dropdown-toggle inline-flex py-2 px-4 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                        onClick={handleProfileMenu}>
-                        Profile
-                    </button>}
-                    {auth && isProfileMenuOpen && <ul
-                        ref={profileMenuRef}
-                        className="block z-50 bottom-10 min-w-[8rem] max-w-[12rem] right-0 bg-gray-50 border border-gray-100 shadow-sm shadow-slate-200 rounded-md sm:top-8 sm:h-fit"
-                        aria-labelledby="dropdown-menu-profile">
-                        <li><NavLink className="dropdown-item" to="/profile">View Profile</NavLink></li>
-                        <li>
-                            <button className="dropdown-item" onClick={logout}>Logout</button>
-                        </li>
-                    </ul>}
+
+                    {
+                        auth && (
+                            <div className="relative inline-block text-left">
+                                <button
+                                    id="menu-button"
+                                    aria-expanded={isProfileMenuOpen ? 'true' : 'false'}
+                                    aria-haspopup="true"
+                                    onClick={handleProfileMenu}
+                                    className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                                >
+                                    Profile
+                                </button>
+
+                                {/* This conditional rendering will show the dropdown if isProfileMenuOpen is true */}
+                                {isProfileMenuOpen && (
+                                    <div
+                                        ref={profileMenuRef}
+                                        className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5"
+                                        role="menu"
+                                        aria-orientation="vertical"
+                                        aria-labelledby="menu-button"
+                                        tabIndex="-1"
+                                    >
+                                        <div className="py-1" role="none">
+                                            {/* Dropdown menu items */}
+                                            <NavLink to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">View Profile</NavLink>
+                                            {auth.venueManager && <Link to="/create-venue" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Create Venue</Link>}
+                                            <button onClick={logout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" role="menuitem">Logout</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    }
                     {!auth && renderNavLink('/register', 'Register')}
                     {!auth && renderNavLink('/login', 'Login')}
                 </ul>
