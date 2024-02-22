@@ -1,6 +1,4 @@
 import { defineConfig } from 'vite';
-
-import reactRefresh from '@vitejs/plugin-react-refresh';
 import autoprefixer from 'autoprefixer';
 import eslintPlugin from 'vite-plugin-eslint';
 import tailwindcss from 'tailwindcss';
@@ -10,7 +8,7 @@ const getEnvVar = (key, fallback = '') => JSON.stringify(process.env[key] || fal
 
 export default defineConfig({
     plugins: [
-        [reactRefresh()],
+
         eslintPlugin({
             cache: false,
             include: ['./src/**/*.js', './src/**/*.jsx'],
