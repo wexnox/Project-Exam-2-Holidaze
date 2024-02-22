@@ -1,13 +1,7 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import About from '../../pages/About.jsx';
+import React from 'react';
 
-/**
- * Represents the footer component of the website.
- * @constructor
- * @return {JSX.Element} The rendered footer component.
- */
-const Footer = () => {
+function Footer() {
     return (
         <footer className="bg-teal-500 text-white py-8">
             <div className="container mx-auto flex flex-wrap items-center">
