@@ -11,6 +11,7 @@ import Profile from './components/Profile/Profile.jsx';
 import About from './pages/About.jsx';
 import Contact from './pages/Contact.jsx';
 import Search from './components/Search.jsx';
+import CreateVenue from './components/venues/CreateVenue.jsx';
 // import ThemeSwitcher from './js/ThemeSwitcher';
 
 // TODO: Convert to 6* routes. createBrowserRouter(createRoutesFromElements())
@@ -33,6 +34,8 @@ function App() {
 
                     <Route path="venues" element={<Venues />} />
                     <Route path="venues/venue-details/:id" element={<VenueDetails />} />
+                    <Route path="/create-venue" element={<CreateVenue />} />
+
                     <Route path="/search/:value" element={<Search />} />
 
                     <Route path="*" element={<NotFound />} />
