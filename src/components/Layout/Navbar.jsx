@@ -3,15 +3,8 @@ import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
-import Breadcrumbs from '../Breadcrumbs.jsx';
 
-
-/**
- * Handles the search functionality.
- *
- * @returns {boolean} Returns true if navigation has occurred, otherwise false.
- */
-const Navbar = () => {
+function Navbar() {
     const [searchValue, setSearchValue] = useState('');
     const navigate = useNavigate();
     const [auth, setAuth] = useContext(AuthContext);
@@ -19,26 +12,15 @@ const Navbar = () => {
     const profileMenuRef = useRef(null);
     const [isNavVisible, setIsNavVisible] = useState(false);
 
-    /**
-     * Handles the search functionality.
-     *
-     * @returns {boolean} Returns true if navigation has occurred, otherwise false.
-     */
     function handleSearch() {
         const trimmedSearchValue = searchValue.trim();
         if (trimmedSearchValue) {
             navigate(`/search/${trimmedSearchValue.replace(/  +/g, ' ')}`);
-            return true;    // Navigation has occurred
+            return true;
         }
-        return false;   // No navigation
+        return false;
     }
 
-    /**
-     * Handles the key press event for the search input field.
-     *
-     * @param {Event} e - The key press event object.
-     * @return {void}
-     */
     function handleSearchEnterPress(e) {
         if (e.key === 'Enter') {
             handleSearch();
@@ -46,16 +28,9 @@ const Navbar = () => {
     }
 
 
-    /**
-     * Handles the profile menu functionality.
-     * Toggles the isProfileMenuOpen state.
-     *
-     * @callback handleProfileMenu
-     * @return {void}
-     */
     const handleProfileMenu = useCallback(() => {
         setIsProfileMenuOpen((prevState) => !prevState);
-    }, [isProfileMenuOpen]);
+    }, []);
 
 
     useEffect(() => {
@@ -65,14 +40,7 @@ const Navbar = () => {
         }
     }, [isProfileMenuOpen]);
 
-    /**
-     * Handles click events outside of the profile menu.
-     * If the click event target is not within the profileMenuRef element,
-     * the isProfileMenuOpen state is set to false.
-     *
-     * @param {Event} event - The click event object.
-     * @returns {void}
-     */
+
     useEffect(() => {
         const handleClickOutside = event => {
             if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
@@ -87,23 +55,6 @@ const Navbar = () => {
     }, []);
 
 
-    /**
-     * Function to handle user logout
-     *
-     * @function
-     * @name logout
-     * @memberof module:authentication
-     * @return {void}
-     *
-     * @example
-     * // Usage
-     * logout();
-     *
-     * @description
-     * This function is used to log out the user. It removes the user's token and user information
-     * from the local storage, sets the authentication state to null, closes the profile menu,
-     * and navigates the user to the home page.
-     */
     const logout = useCallback(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
@@ -114,11 +65,6 @@ const Navbar = () => {
         document.getElementById('menu-button').focus();
     }, [setAuth, setIsProfileMenuOpen, navigate]);
 
-    /**
-     * Retrieves the user object stored in the browser's localStorage.
-     *
-     * @returns {object} The user object stored in localStorage.
-     */
     // Check for auth on component mount
     useEffect(() => {
         const user = localStorage.getItem('user');
