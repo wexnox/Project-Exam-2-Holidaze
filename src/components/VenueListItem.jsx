@@ -1,18 +1,6 @@
 import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import React from 'react';
 
-/**
- * Represents a single venue item in a list.
- *
- * @param {object} VenueListItem - The props object.
- * @param {string} VenueListItem.id - The unique ID of the venue.
- * @param {string} VenueListItem.name - The name of the venue.
- * @param {string[]} VenueListItem.media - The array of media URLs for the venue.
- * @param {number} VenueListItem.maxGuests - The maximum number of guests the venue can accommodate.
- * @param {number} VenueListItem.price - The price of the venue per night.
- * @returns {ReactElement} The rendered venue item.
- */
 const VenueListItem = ({ id, name, media, maxGuests, price }) => {
     const firstImage = media?.[0] ?? 'defaultImageURL';
     const altText = `${name} venue`;
@@ -36,43 +24,5 @@ const VenueListItem = ({ id, name, media, maxGuests, price }) => {
         </Link>
     );
 };
-/**
- * Props definition for the VenueListItem component.
- *
- * @typedef {Object} VenueListItemProps
- * @property {string} id - The unique identifier of the venue.
- * @property {string} name - The name of the venue.
- * @property {string} address - The address of the venue.
- * @property {string} city - The city where the venue is located.
- * @property {string} state - The state where the venue is located.
- * @property {string} country - The country where the venue is located.
- * @property {string} imageUrl - The URL of the image for the venue.
- * @property {number} rating - The rating of the venue (from 0 to 5).
- * @property {() => void} onClick - The callback function to be called when the venue is clicked.
- *
- * @example
- * // Using the VenueListItem component
- * const venue = {
- *   id: 'venue1',
- *   name: 'Example Venue',
- *   address: '123 Main St',
- *   city: 'City Example',
- *   state: 'State Example',
- *   country: 'Country Example',
- *   imageUrl: 'https://example.com/image.jpg',
- *   rating: 4,
- *   onClick: () => {
- *     console.log('Venue clicked');
- *   }
- * };
- *
- * <VenueListItem {...venue} />
- */
-VenueListItem.propTypes = {
-    id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    media: PropTypes.array.isRequired,
-    maxGuests: PropTypes.number.isRequired,
-    price: PropTypes.number.isRequired,
-};
+
 export default VenueListItem;
