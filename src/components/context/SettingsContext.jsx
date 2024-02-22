@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React, { createContext, useState } from 'react';
 import { useApi } from '../../js/api.js';
-import PropTypes from 'prop-types';
 
-const SettingsContext = createContext([null, () => {
-}]);
+export const SettingsContext = createContext([]);
 
-const SettingsContextProvider = ({ children }) => {
+function SettingsContextProvider({ children }) {
     const { data, isLoading, isError, fetchData, created } = useApi();
     const [sort, setSort] = useState(null);
     const [sortOrder, setSortOrder] = useState(null);
@@ -27,10 +24,7 @@ const SettingsContextProvider = ({ children }) => {
     };
 
     return <SettingsContext.Provider value={contextData}>{children}</SettingsContext.Provider>;
-};
+}
 
-SettingsContextProvider.propTypes = {
-    children: PropTypes.node.isRequired,
-};
 
-export { SettingsContext, SettingsContextProvider };
+export default SettingsContextProvider;
