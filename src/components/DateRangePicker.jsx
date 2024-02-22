@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import DatePicker from 'react-datepicker';
-import PropTypes from 'prop-types';
+
 
 const DateRangePicker = ({ startDate, endDate, setStartDate, handleDateChange, bookingsArray, auth, maxDate, setMaxDate }) => {
 
@@ -30,18 +30,4 @@ const DateRangePicker = ({ startDate, endDate, setStartDate, handleDateChange, b
     );
 };
 
-DateRangePicker.propTypes = {
-    startDate: PropTypes.instanceOf(Date),
-    endDate: PropTypes.instanceOf(Date),
-    handleDateChange: PropTypes.func.isRequired,
-    bookingsArray: PropTypes.array.isRequired,
-    auth: PropTypes.oneOfType([
-        PropTypes.string,
-        PropTypes.object,
-        PropTypes.bool,
-    ]),
-    setStartDate: PropTypes.func.isRequired, // This line
-    maxDate: PropTypes.instanceOf(Date),
-    setMaxDate: PropTypes.func.isRequired,
-};
 export default DateRangePicker;
