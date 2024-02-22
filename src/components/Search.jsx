@@ -3,7 +3,7 @@ import VenueListItem from './VenueListItem.jsx';
 import { API_VENUES } from '../js/constants.js';
 import React, { useContext, useEffect } from 'react';
 import { getValidVenues } from '../js/validation.js';
-import SettingsContext from './context/SettingsContext.jsx';
+import { SettingsContext } from './context/SettingsContext.jsx';
 
 function isSearchMatch(item, searchValue) {
     return item.name.toLowerCase().includes(searchValue) || item.description.toLowerCase().includes(searchValue);
@@ -29,8 +29,6 @@ function SearchResultsDisplay({ searchResults }) {
 function Search() {
     const { value } = useParams();
     const [data, isLoading, isError, fetchData] = useContext(SettingsContext);
-    // const contextData = useContext(SettingsContext);
-    // const { data, isLoading, isError, fetchData } = contextData;
     const searchValue = value.toLowerCase();
     const searchResults = getSearchResults(data, searchValue);
 
