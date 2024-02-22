@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ArrowIcon from '../components/ArrowIcon';
 import { handleImageError } from '../js/validation.js';
 
@@ -19,7 +18,7 @@ const ArrowButton = ({ id, label, clickHandler, rotation }) => (
         id={id}
         aria-label={label}
         onClick={clickHandler}
-        className={`absolute top-1/2 -translate-y-1/2 flex items-center justify-center transform 
+        className={`absolute top-1/2 -translate-y-1/2 flex items-center justify-center transform
                     rotate-${rotation} h-8 w-8 bg-gray-200/80 rounded-full ease-out duration-200 hover:bg-white lg:opacity-50
                     ${id === 'prev-image' ? 'left-4' : 'right-4'} z-20 group-hover:opacity-100`}>
         <ArrowIcon />
@@ -95,23 +94,5 @@ const Slideshow = ({ media, activeSlide, setActiveSlide, name }) => {
         </div>
     );
 };
-ArrowButton.propTypes = {
-    id: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    clickHandler: PropTypes.func.isRequired,
-    rotation: PropTypes.number.isRequired,
-};
 
-DotButton.propTypes = {
-    setActiveSlide: PropTypes.func.isRequired,
-    isActive: PropTypes.bool.isRequired,
-    index: PropTypes.number.isRequired,
-};
-
-Slideshow.propTypes = {
-    media: PropTypes.arrayOf(PropTypes.string).isRequired,
-    activeSlide: PropTypes.number.isRequired,
-    setActiveSlide: PropTypes.func.isRequired,
-    name: PropTypes.string,
-};
 export default Slideshow;
