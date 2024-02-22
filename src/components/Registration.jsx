@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
-import { useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { API_REGISTER } from '../js/constants.js';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext.jsx';
@@ -9,7 +9,7 @@ import { useApi } from '../js/api.js';
 import { getValidationSchema } from '../js/validation.js';
 
 
-const Register = () => {
+function Register() {
     const { auth, setAuth } = useContext(AuthContext);
     const [isVenueManager, setIsVenueManager] = useState(false);
 
