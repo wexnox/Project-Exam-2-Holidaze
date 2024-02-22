@@ -1,16 +1,9 @@
-import React from 'react';
 import Navbar from './Navbar';
+import React from 'react';
 
-/**
- * Represents the Header component.
- *
- * @returns {JSX.Element} The rendered Header component.
- */
-const Header = () => {
+function Header() {
     return (
-
         <Navbar />
-
     );
 };
 
