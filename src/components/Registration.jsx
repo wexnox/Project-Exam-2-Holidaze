@@ -1,10 +1,8 @@
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import { useContext, useState } from 'react';
 import { API_REGISTER } from '../js/constants.js';
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext.jsx';
 import { useApi } from '../js/api.js';
