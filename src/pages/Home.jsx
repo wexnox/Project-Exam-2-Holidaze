@@ -1,10 +1,9 @@
-import { useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { API_VENUES } from '../js/constants.js';
 import VenueListItem from '../components/VenueListItem.jsx';
 import { getValidVenues } from '../js/validation.js';
 import { SettingsContext } from '../components/context/SettingsContext.jsx';
-import PropTypes from 'prop-types';
-import React from 'react';
+
 
 const Headline = () => (
     <section id={'headline'}>
@@ -40,15 +39,9 @@ const LatestVenues = ({ isError, data, isLoading }) => (
     </section>
 );
 
-LatestVenues.propTypes = {
-    isError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-    data: PropTypes.array,
-    isLoading: PropTypes.bool,
-};
-
 const ErrorMessage = () => (
-    <div className={'api-error'}>
-        <p>Something went wrong..</p>
+    <div className={'bg-red-100 border-l-4 border-red-500 text-red-700 p-4'}>
+        <p className="font-bold">Something went wrong..</p>
         <p>Please try again later</p>
     </div>
 );
@@ -59,11 +52,6 @@ const VenueList = ({ data }) => {
             .slice(0, 12)
             .map((venue) => <VenueListItem key={venue.id} {...venue} />)
         : null;
-};
-
-VenueList.propTypes = {
-    data: PropTypes.array,
-    isError: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
 };
 
 const Home = () => {
