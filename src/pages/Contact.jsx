@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 const validationSchema = yup.object().shape({
     name: yup.string().required(),
@@ -23,12 +23,6 @@ function useContactForm() {
 function ErrorMessage({ error }) {
     return error ? <span className="text-red-500">{error.message}</span> : null;
 }
-
-ErrorMessage.propTypes = {
-    error: PropTypes.shape({
-        message: PropTypes.string,
-    }),
-};
 
 export default function Contact() {
 
