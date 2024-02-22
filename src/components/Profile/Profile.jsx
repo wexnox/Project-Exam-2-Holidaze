@@ -1,18 +1,13 @@
 import React, { useContext, useRef, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import PropTypes from 'prop-types';
 import { getLocalStorage } from '../../js/storage.mjs';
 import { useApi } from '../../js/api.js';
 import { getValidationImageSchema, smoothScrollToElement } from '../../js/validation.js';
 import { API_PROFILE } from '../../js/constants.js';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import profileImg from '../../assets/placeholder-image.svg';
-import ProfileVenueManager from './ProfileVenueManager.jsx';
-import ProfileCustomer from './ProfileCustomer.jsx';
-
 
 const useProfile = (navigate, setAuth, isError, setIsFormError, avatarErrorRef, avatarSubmitButtonRef, accessToken, data) => {
     useEffect(() => {
@@ -144,16 +139,6 @@ function Profile() {
                             </div>
                         </div>
 
-                        <div id={'customer-manager'} className={'flex flex-col sm:grow'}>
-                            {venueManager ? (
-                                <ProfileVenueManager />
-                            ) : (
-                                <div>
-                                    <h2 className={'text-xl font-bold mb-6'}>Upcoming bookings</h2>
-                                    <ProfileCustomer />
-                                </div>
-                            )}
-                        </div>
                     </div>
                 </div>
             </section>
