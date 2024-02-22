@@ -28,7 +28,7 @@ function SearchResultsDisplay({ searchResults }) {
 
 function Search() {
     const { value } = useParams();
-    const [data, isLoading, isError, fetchData] = useContext(SettingsContext);
+    const { data, isLoading, isError, fetchData } = useContext(SettingsContext);
     const searchValue = value.toLowerCase();
     const searchResults = getSearchResults(data, searchValue);
 
