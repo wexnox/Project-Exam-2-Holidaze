@@ -1,8 +1,7 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import React from 'react';
 
 const validationSchema = yup.object().shape({
     name: yup.string().required(),
