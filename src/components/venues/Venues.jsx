@@ -37,7 +37,7 @@ function ErrorResponse() {
 }
 
 function Venues() {
-    const [data, isLoading, isError, fetchData, , , , sort, setSort, sortOrder, setSortOrder] = useContext(SettingsContext);
+    const { data, isLoading, isError, fetchData, sort, setSort, sortOrder, setSortOrder } = useContext(SettingsContext);
 
     useEffect(() => {
         fetchData(`${API_VENUES}?&sort=${sort ? 'created' : 'name'}&sortOrder=${sortOrder ? 'desc' : 'asc'}`);
