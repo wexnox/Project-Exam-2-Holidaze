@@ -9,6 +9,7 @@ import { AuthContext } from '../context/AuthContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import profileImg from '../../assets/placeholder-image.svg';
 
+// TODO: Need to reformat this
 const useProfile = (navigate, setAuth, isError, setIsFormError, avatarErrorRef, avatarSubmitButtonRef, accessToken, data) => {
     useEffect(() => {
         // checkUserAuthentication function
