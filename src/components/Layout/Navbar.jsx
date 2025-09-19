@@ -2,20 +2,26 @@ import React, { useContext, useEffect, useRef, useState, useCallback } from 'rea
 import { Link, NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { FaChevronDown } from 'react-icons/fa6';
 import { AuthContext } from '../context/AuthContext.js';
+import { handleImageError } from '../../js/validation.js';
+import profileImg from '../../assets/placeholder-image.svg';
 
 function Navbar() {
   const [searchValue, setSearchValue] = useState('');
+  const [isSuggestOpen, setIsSuggestOpen] = useState(false);
   const navigate = useNavigate();
   const [auth, setAuth] = useContext(AuthContext);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuRef = useRef(null);
+  const searchWrapRef = useRef(null);
   const [isNavVisible, setIsNavVisible] = useState(false);
 
   function handleSearch() {
     const trimmedSearchValue = searchValue.trim();
     if (trimmedSearchValue) {
       navigate(`/search/${trimmedSearchValue.replace(/  +/g, ' ')}`);
+      setIsSuggestOpen(false);
       return true;
     }
     return false;
@@ -24,6 +30,8 @@ function Navbar() {
   function handleSearchEnterPress(e) {
     if (e.key === 'Enter') {
       handleSearch();
+    } else if (e.key === 'Escape') {
+      setIsSuggestOpen(false);
     }
   }
 
@@ -39,6 +47,26 @@ function Navbar() {
       firstElement && firstElement.focus();
     }
   }, [isProfileMenuOpen]);
+
+  // Static helper suggestions (fields you can search by)
+  const STATIC_SUGGESTIONS = [
+    { label: 'Name' },
+    { label: 'Address' },
+    { label: 'City' },
+    { label: 'Country' },
+    { label: 'Continent' }
+  ];
+
+  // Close suggestions on outside click
+  useEffect(() => {
+    const onDocClick = (e) => {
+      if (searchWrapRef.current && !searchWrapRef.current.contains(e.target)) {
+        setIsSuggestOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onDocClick);
+    return () => document.removeEventListener('mousedown', onDocClick);
+  }, []);
 
 
   useEffect(() => {
@@ -104,15 +132,16 @@ function Navbar() {
         <div className="flex-grow px-4">
           <div className={'mx-auto px-4 lg:p-0 '}>
 
-            <div className="flex gap-2 max-w-[600px]">
+            <div className="flex gap-2 max-w-[600px]" ref={searchWrapRef}>
               <label className={'w-full relative'}>
                 <input aria-label={'Search for venues'}
                        className={'border-gray-200 border rounded h-10 indent-4 w-full font-light placeholder:text-zinc-400 placeholder:font-normal'}
                        type={'text'} placeholder={'Search your venues'} value={searchValue}
-                       onChange={(e) => setSearchValue(e.target.value)}
-                       onKeyUp={handleSearchEnterPress} />
+                       onFocus={() => setIsSuggestOpen(true)}
+                       onChange={(e) => { setSearchValue(e.target.value); setIsSuggestOpen(true); }}
+                       onKeyDown={handleSearchEnterPress} />
 
-                <button aria-label={'Clear search value'} onClick={() => setSearchValue('')}
+                <button aria-label={'Clear search value'} onClick={() => { setSearchValue(''); setIsSuggestOpen(false); }}
                         className={`${searchValue.trim() ? 'absolute' : 'hidden'} right-3 top-2`}>
                   <svg
                     className={'pointer-events-none'}
@@ -130,6 +159,24 @@ function Navbar() {
                     />
                   </svg>
                 </button>
+
+                {isSuggestOpen && (
+                  <div className={'absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded shadow-sm p-2'}>
+                    <p className={'text-xs text-gray-500 px-1 pb-2'}>You can search by:</p>
+                    <div className={'flex flex-wrap gap-2 px-1'}>
+                      {STATIC_SUGGESTIONS.map((s, idx) => (
+                        <button
+                          key={idx}
+                          type={'button'}
+                          className={'text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                          onClick={() => { setIsSuggestOpen(false); }}
+                        >
+                          {s.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </label>
               <button onClick={handleSearch} aria-label={'Submit search'}
                       className={'px-3 rounded hover:bg-blue-200 hover:text-white ease-out duration-200'}>Search
@@ -150,9 +197,21 @@ function Navbar() {
                   aria-expanded={isProfileMenuOpen ? 'true' : 'false'}
                   aria-haspopup="true"
                   onClick={handleProfileMenu}
-                  className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
+                  className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none"
                 >
-                  Profile
+                  <img
+                    src={auth?.avatar || profileImg}
+                    alt="Profile avatar"
+                    className="h-8 w-8 rounded-full object-cover ring-1 ring-gray-200"
+                    onError={handleImageError}
+                  />
+                  <span className="hidden md:inline">Profile</span>
+                  {auth?.venueManager && (
+                    <span className="ml-1 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+                      Manager
+                    </span>
+                  )}
+                  <FaChevronDown className={`ml-1 transition-transform ${isProfileMenuOpen ? 'rotate-180' : ''}`} />
                 </button>
 
                 {/* This conditional rendering will show the dropdown if isProfileMenuOpen is true */}
@@ -166,9 +225,14 @@ function Navbar() {
                     tabIndex="-1"
                   >
                     <div className="py-1" role="none">
+                      {/* Role indicator */}
+                      <div className="px-4 py-2 text-xs text-gray-500" role="presentation">
+                        Role: {auth?.venueManager ? 'Venue Manager' : 'Customer'}
+                      </div>
+                      <div className="border-t border-gray-100 my-1" role="presentation" />
                       {/* Dropdown menu items */}
                       <NavLink to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">View Profile</NavLink>
-                      {auth.venueManager && <Link to="/create-venue" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Create Venue</Link>}
+                      {auth?.venueManager && <Link to="/create-venue" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem">Create Venue</Link>}
                       <button onClick={logout} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left" role="menuitem">Logout</button>
                     </div>
                   </div>
