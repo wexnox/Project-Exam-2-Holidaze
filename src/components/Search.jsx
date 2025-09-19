@@ -5,8 +5,24 @@ import React, { useContext, useEffect } from 'react';
 import { getValidVenues } from '../js/validation.js';
 import { SettingsContext } from './context/SettingsContext.js';
 
+function normalize(val) {
+  return typeof val === 'string' ? val.toLowerCase() : '';
+}
+
 function isSearchMatch(item, searchValue) {
-  return item.name.toLowerCase().includes(searchValue) || item.description.toLowerCase().includes(searchValue);
+  const name = normalize(item?.name);
+  const address = normalize(item?.location?.address);
+  const city = normalize(item?.location?.city);
+  const country = normalize(item?.location?.country);
+  const continent = normalize(item?.location?.continent);
+
+  return (
+    name.includes(searchValue) ||
+    address.includes(searchValue) ||
+    city.includes(searchValue) ||
+    country.includes(searchValue) ||
+    continent.includes(searchValue)
+  );
 }
 
 function getSearchResults(data, searchValue) {
