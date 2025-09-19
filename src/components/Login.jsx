@@ -50,41 +50,43 @@ const Login = () => {
   };
 
   return (
-    <form className="container mx-auto max-w-md mt-10" onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="text-2xl font-bold mb-5">Login</h2>
-      <div className="mb-4">
-        <label htmlFor="email" className="block mb-1">
-          Email
-        </label>
-        <input
-          name="email"
-          type="text"
-          placeholder="Email"
-          className="w-full p-2 border border-gray-300 rounded"
-          ref={register}
-          {...register('email', { required: true, pattern: /.*@stud\.noroff\.no$/ })}
-        />
-        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-      </div>
-      <div className="mb-6">
-        <label htmlFor="password" className="block mb-1">
-          Password
-        </label>
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border border-gray-300 rounded"
-          ref={register}
-          {...register('password', { required: true })}
-        />
-        {errors.password && <p className="text-red-500">{errors.password.message}</p>}
-      </div>
-      {serverError && <p className="text-red-500">{serverError}</p>}
-      <button type="submit" className="bg-blue-500 text-white p-3 rounded">
-        Login
-      </button>
-    </form>
+    <div className="min-h-full flex items-center justify-center py-12">
+      <form className="w-full max-w-md container mx-auto" onSubmit={handleSubmit(onSubmit)}>
+        <h2 className="text-2xl font-bold mb-5 text-center">Login</h2>
+        <div className="mb-4">
+          <label htmlFor="email" className="block mb-1">
+            Email
+          </label>
+          <input
+            name="email"
+            type="text"
+            placeholder="Email"
+            className="w-full p-2 border border-gray-300 rounded"
+            ref={register}
+            {...register('email', { required: true, pattern: /.*@stud\.noroff\.no$/ })}
+          />
+          {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+        </div>
+        <div className="mb-6">
+          <label htmlFor="password" className="block mb-1">
+            Password
+          </label>
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            className="w-full p-2 border border-gray-300 rounded"
+            ref={register}
+            {...register('password', { required: true })}
+          />
+          {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+        </div>
+        {serverError && <p className="text-red-500">{serverError}</p>}
+        <button type="submit" className="bg-blue-500 text-white p-3 rounded w-full">
+          Login
+        </button>
+      </form>
+    </div>
   );
 };
 
