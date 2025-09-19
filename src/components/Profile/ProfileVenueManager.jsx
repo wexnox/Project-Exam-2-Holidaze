@@ -13,12 +13,17 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import UpcomingBookings from './UpcomingBookings.jsx';
 import { SettingsContext } from '../context/SettingsContext.js';
 
-
 function ProfileVenueManager() {
-  const { data, isLoading, isError, fetchData, isVenueSectionActive, setIsVenueSectionActive } = useContext(SettingsContext);
+  const { data, isLoading, isError, fetchData, isVenueSectionActive, setIsVenueSectionActive } =
+    useContext(SettingsContext);
 
   const [isDoneFetching, setIsDoneFetching] = useState(false);
-  const { isError: isDeleteError, isLoading: isLoadingDeleteVenue, isDeleted, fetchData: deleteVenue } = useApi();
+  const {
+    isError: isDeleteError,
+    isLoading: isLoadingDeleteVenue,
+    isDeleted,
+    fetchData: deleteVenue,
+  } = useApi();
   const { name, accessToken } = getLocalStorage('user');
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [venueIdToBeDeletedOrChanged, setVenueIdToBeDeletedOrChanged] = useState('');
@@ -31,7 +36,7 @@ function ProfileVenueManager() {
   const [locationString, setLocationString] = useState('');
   const mediaArray = useFieldArray({
     control,
-    name: 'media'
+    name: 'media',
   });
   const [mediaURL, setMediaURL] = useState('');
   const editFormErrorRef = useRef(null);
@@ -43,7 +48,7 @@ function ProfileVenueManager() {
     created: venueEdited,
     isError: isEditError,
     errorMsg: editErrorMsg,
-    fetchData: editVenue
+    fetchData: editVenue,
   } = useApi();
 
   function onEditSubmit(data) {
@@ -61,7 +66,7 @@ function ProfileVenueManager() {
     setValue('name', e.currentTarget.dataset.name);
     setValue('description', e.currentTarget.dataset.description);
     setLocationString(
-      `${locationObject.address}, ${locationObject.zip}, ${locationObject.city}, ${locationObject.country} `
+      `${locationObject.address}, ${locationObject.zip}, ${locationObject.city}, ${locationObject.country} `,
     );
     setValue('price', e.currentTarget.dataset.price);
     setValue('maxGuests', e.currentTarget.dataset.maxguests);
@@ -90,10 +95,11 @@ function ProfileVenueManager() {
   useEffect(() => {
     if (isVenueSectionActive) {
       setIsDoneFetching(false);
-      fetchData(`${API_PROFILE}/${name}/venues?_bookings=true&_venues=true`, 'GET', accessToken)
-        .then(() =>
-          setIsDoneFetching(true)
-        );
+      fetchData(
+        `${API_PROFILE}/${name}/venues?_bookings=true&_venues=true`,
+        'GET',
+        accessToken,
+      ).then(() => setIsDoneFetching(true));
       setIsDeleteModalOpen(false);
       setIsEditModalOpen(false);
     }
@@ -144,14 +150,32 @@ function ProfileVenueManager() {
               </div>
             </>
           )}
-          <div id={'venue-container'} className={'flex flex-col gap-6 lg:grid lg:grid-cols-2 xl:grid-cols-3'}>
+          <div
+            id={'venue-container'}
+            className={'flex flex-col gap-6 lg:grid lg:grid-cols-2 xl:grid-cols-3'}
+          >
             {data.length > 0 &&
               data.map(
-                ({ id, name: venueName, description, location, price, maxGuests, media, bookings, meta }, index) => {
+                (
+                  {
+                    id,
+                    name: venueName,
+                    description,
+                    location,
+                    price,
+                    maxGuests,
+                    media,
+                    bookings,
+                    meta,
+                  },
+                  index,
+                ) => {
                   return (
                     <div
                       key={index}
-                      className={'rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100'}
+                      className={
+                        'rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100'
+                      }
                     >
                       <Link to={`/venues/venue-details/${id}`}>
                         <img
@@ -171,7 +195,11 @@ function ProfileVenueManager() {
                         </h3>
                         {bookings && bookings.length ? (
                           <details className={'relative'}>
-                            <summary className={'cursor-pointer select-none font-bold text-red-800 mt-2.5 mb-6'}>
+                            <summary
+                              className={
+                                'cursor-pointer select-none font-bold text-red-800 mt-2.5 mb-6'
+                              }
+                            >
                               View bookings
                             </summary>
                             <ul
@@ -184,7 +212,8 @@ function ProfileVenueManager() {
                                 .map(({ id, dateFrom, dateTo }) => {
                                   return (
                                     <li key={id}>
-                                      {format(parseISO(dateFrom), 'd MMM')} to {format(parseISO(dateTo), 'd MMM')}{' '}
+                                      {format(parseISO(dateFrom), 'd MMM')} to{' '}
+                                      {format(parseISO(dateTo), 'd MMM')}{' '}
                                       {format(parseISO(dateTo), 'y')}
                                     </li>
                                   );
@@ -192,7 +221,9 @@ function ProfileVenueManager() {
                             </ul>
                           </details>
                         ) : (
-                          <p className={'font-extralight mt-2.5 mb-6 text-gray-900 italic'}>No bookings</p>
+                          <p className={'font-extralight mt-2.5 mb-6 text-gray-900 italic'}>
+                            No bookings
+                          </p>
                         )}
                       </div>
                       <div className={'flex gap-3'}>
@@ -226,16 +257,22 @@ function ProfileVenueManager() {
                       </div>
                     </div>
                   );
-                }
+                },
               )}
           </div>
           {isDoneFetching && data.length === 0 && !isError && (
-            <div className={'rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100 md:w-fit'}>
+            <div
+              className={
+                'rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100 md:w-fit'
+              }
+            >
               <h3 className={'text-lg font-bold mb-2'}>You have no venues</h3>
               <p>
                 Create{' '}
                 <Link
-                  className={'text-rose-800 font-bold underline-offset-4 decoration-2 hover:underline'}
+                  className={
+                    'text-rose-800 font-bold underline-offset-4 decoration-2 hover:underline'
+                  }
                   to={'/create-venue'}
                 >
                   Venue
@@ -303,9 +340,16 @@ function ProfileVenueManager() {
               isDeleteModalOpen ? '' : 'invisible opacity-0'
             }`}
           >
-            <div id={'delete-venue-modal-content'} className={'bg-white max-w-md mx-auto rounded-xl'}>
+            <div
+              id={'delete-venue-modal-content'}
+              className={'bg-white max-w-md mx-auto rounded-xl'}
+            >
               <div className={'px-6 pb-6'}>
-                <header className={'h-[80px] flex items-center justify-center relative border-b-2 border-b-neutral-50'}>
+                <header
+                  className={
+                    'h-[80px] flex items-center justify-center relative border-b-2 border-b-neutral-50'
+                  }
+                >
                   <h3 className={'font-bold'}>Delete venue</h3>
                   <button
                     aria-label={'Close modal'}
@@ -333,7 +377,9 @@ function ProfileVenueManager() {
                   <div className={'flex gap-4'}>
                     <button
                       onClick={() => setIsDeleteModalOpen(false)}
-                      className={'bg-rose-800 text-white rounded h-10 w-full hover:bg-rose-700 ease-out duration-200'}
+                      className={
+                        'bg-rose-800 text-white rounded h-10 w-full hover:bg-rose-700 ease-out duration-200'
+                      }
                     >
                       Cancel
                     </button>

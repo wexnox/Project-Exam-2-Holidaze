@@ -6,21 +6,21 @@ import { format, parseISO } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { SettingsContext } from '../context/SettingsContext.js';
 
-
 function ProfileCustomer() {
-
   const { data, isLoading, isError, fetchData } = useContext(SettingsContext);
   const [isDoneFetching, setIsDoneFetching] = useState(false);
   const { name, accessToken } = getLocalStorage('user');
   const upComingBookings = data.bookings
     ? data.bookings
-      .filter((booking) => new Date(new Date().setHours(0, 0, 0, 0)) <= new Date(booking.dateFrom))
-      .sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom))
+        .filter(
+          (booking) => new Date(new Date().setHours(0, 0, 0, 0)) <= new Date(booking.dateFrom),
+        )
+        .sort((a, b) => new Date(a.dateFrom) - new Date(b.dateFrom))
     : [];
 
   useEffect(() => {
     fetchData(`${API_PROFILE}/${name}?_bookings=true&_venues=true`, 'GET', accessToken).then(() =>
-      setIsDoneFetching(true)
+      setIsDoneFetching(true),
     );
   }, [accessToken, fetchData, name]);
 
@@ -33,7 +33,10 @@ function ProfileCustomer() {
           </div>
         </>
       )}
-      <div id={'bookings-container'} className={'flex flex-col gap-6 lg:grid lg:grid-cols-2 xl:grid-cols-3'}>
+      <div
+        id={'bookings-container'}
+        className={'flex flex-col gap-6 lg:grid lg:grid-cols-2 xl:grid-cols-3'}
+      >
         {upComingBookings.length > 0 &&
           upComingBookings.map(({ created, dateFrom, dateTo, guests, venue }, index) => {
             const dateCreated = format(parseISO(created), 'd MMM');
@@ -43,7 +46,9 @@ function ProfileCustomer() {
             return (
               <div
                 key={index}
-                className={'flex flex-col gap-2 rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100'}
+                className={
+                  'flex flex-col gap-2 rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100'
+                }
               >
                 <Link to={`/venues/venue-details/${venue.id}`}>
                   <img
@@ -54,7 +59,11 @@ function ProfileCustomer() {
                   />
                 </Link>
                 <div>
-                  <h3 className={'text-lg font-bold capitalize whitespace-nowrap overflow-hidden text-ellipsis'}>
+                  <h3
+                    className={
+                      'text-lg font-bold capitalize whitespace-nowrap overflow-hidden text-ellipsis'
+                    }
+                  >
                     {venue.name}
                   </h3>
                   <p className={'text-xs font-light mt-1'}>Booked on {dateCreated}</p>
@@ -70,7 +79,11 @@ function ProfileCustomer() {
           })}
       </div>
       {isDoneFetching && upComingBookings.length === 0 && !isError && (
-        <div className={'rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100 md:w-fit'}>
+        <div
+          className={
+            'rounded-xl p-6 border border-neutral-200 shadow-sm shadow-neutral-100 md:w-fit'
+          }
+        >
           <h3 className={'text-lg font-bold mb-2'}>No upcoming bookings</h3>
           <p>
             Have a look at{' '}

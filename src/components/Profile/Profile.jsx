@@ -11,8 +11,16 @@ import profileImg from '../../assets/placeholder-image.svg';
 import UpcomingBookings from './UpcomingBookings.jsx';
 import ProfileVenueManager from './ProfileVenueManager.jsx';
 
-
-const useProfile = (navigate, setAuth, isError, setIsFormError, avatarErrorRef, avatarSubmitButtonRef, accessToken, data) => {
+const useProfile = (
+  navigate,
+  setAuth,
+  isError,
+  setIsFormError,
+  avatarErrorRef,
+  avatarSubmitButtonRef,
+  accessToken,
+  data,
+) => {
   useEffect(() => {
     // checkUserAuthentication function
     if (localStorage.getItem('user')) {
@@ -41,13 +49,19 @@ const useProfile = (navigate, setAuth, isError, setIsFormError, avatarErrorRef, 
 };
 
 function Profile() {
-
   const [auth, setAuth] = useContext(AuthContext);
   const { name, avatar, venueManager, accessToken } = auth || getLocalStorage('user');
   const navigate = useNavigate();
   const [avatarURL, setAvatarURL] = useState('');
   const { data, isLoading, errorMsg, isError, fetchData } = useApi(accessToken);
-  const { data: roleData, isLoading: isUpdatingRole, isError: isRoleError, errorMsg: roleErrorMsg, created: roleUpdated, fetchData: updateRole } = useApi();
+  const {
+    data: roleData,
+    isLoading: isUpdatingRole,
+    isError: isRoleError,
+    errorMsg: roleErrorMsg,
+    created: roleUpdated,
+    fetchData: updateRole,
+  } = useApi();
   const [isFormError, setIsFormError] = useState(false);
   const avatarErrorRef = useRef(null);
   const avatarSubmitButtonRef = useRef(null);
@@ -55,9 +69,9 @@ function Profile() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
-    resolver: yupResolver(getValidationImageSchema)
+    resolver: yupResolver(getValidationImageSchema),
   });
 
   const handleURLChange = (event) => {
@@ -69,7 +83,16 @@ function Profile() {
     fetchData(`${API_PROFILE}/${name}/media`, 'PUT', accessToken, data);
   };
 
-  useProfile(navigate, setAuth, isError, setIsFormError, avatarErrorRef, avatarSubmitButtonRef, accessToken, data);
+  useProfile(
+    navigate,
+    setAuth,
+    isError,
+    setIsFormError,
+    avatarErrorRef,
+    avatarSubmitButtonRef,
+    accessToken,
+    data,
+  );
 
   useEffect(() => {
     document.title = 'Holidaze | Profile';
@@ -99,7 +122,11 @@ function Profile() {
           <div id={'profile-container'} className={'flex flex-col gap-14 sm:flex-row sm:gap-8'}>
             <div id={'avatar-container'} className={'sm:w-[18rem] shrink-0'}>
               <h2 className={'text-xl font-bold mb-6'}>Avatar</h2>
-              <div className={'rounded-xl px-6 pt-12 pb-6 border border-neutral-200 shadow-sm shadow-neutral-100'}>
+              <div
+                className={
+                  'rounded-xl px-6 pt-12 pb-6 border border-neutral-200 shadow-sm shadow-neutral-100'
+                }
+              >
                 <img
                   className={'h-32 w-32 object-cover rounded-full my-0 mx-auto'}
                   src={avatar ? avatar : profileImg}
@@ -127,7 +154,10 @@ function Profile() {
                   </p>
                 )}
                 <div id={'avatar-update'} className={'mt-12'}>
-                  <form onSubmit={handleSubmit(handleFormSubmit)} onBlur={() => setIsFormError(false)}>
+                  <form
+                    onSubmit={handleSubmit(handleFormSubmit)}
+                    onBlur={() => setIsFormError(false)}
+                  >
                     <label className={'block font-bold mb-4'} htmlFor={'avatar'}>
                       Update avatar
                     </label>
@@ -140,7 +170,9 @@ function Profile() {
                       type={'text'}
                       placeholder={'Avatar URL'}
                     />
-                    {errors.avatar && <p className={'text-red-700 mt-4'}>{errors.avatar?.message}</p>}
+                    {errors.avatar && (
+                      <p className={'text-red-700 mt-4'}>{errors.avatar?.message}</p>
+                    )}
                     <button
                       ref={avatarSubmitButtonRef}
                       type={'submit'}
@@ -151,14 +183,18 @@ function Profile() {
                     >
                       {isLoading && (
                         <span
-                          className={'loader absolute top-2.5 left-4 h-5 w-5 border-2 border-t-transparent'}
+                          className={
+                            'loader absolute top-2.5 left-4 h-5 w-5 border-2 border-t-transparent'
+                          }
                         ></span>
                       )}
                       {isLoading ? 'Processing..' : 'Update avatar'}
                     </button>
 
                     <div ref={avatarErrorRef}>
-                      {isFormError && <div className={'api-error mt-6 break-words'}>{errorMsg}</div>}
+                      {isFormError && (
+                        <div className={'api-error mt-6 break-words'}>{errorMsg}</div>
+                      )}
                     </div>
                   </form>
                 </div>
@@ -174,6 +210,5 @@ function Profile() {
     </main>
   );
 }
-
 
 export default Profile;
