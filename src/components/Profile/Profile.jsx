@@ -8,8 +8,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { AuthContext } from '../context/AuthContext.js';
 import { useNavigate } from 'react-router-dom';
 import profileImg from '../../assets/placeholder-image.svg';
+import UpcomingBookings from './UpcomingBookings.jsx';
+import ProfileVenueManager from './ProfileVenueManager.jsx';
 
-// TODO: Need to reformat this
+
 const useProfile = (navigate, setAuth, isError, setIsFormError, avatarErrorRef, avatarSubmitButtonRef, accessToken, data) => {
   useEffect(() => {
     // checkUserAuthentication function
@@ -40,15 +42,16 @@ const useProfile = (navigate, setAuth, isError, setIsFormError, avatarErrorRef, 
 
 function Profile() {
 
-  const [, setAuth] = useContext(AuthContext);
-  const { name, avatar, venueManager, accessToken } = getLocalStorage('user');
+  const [auth, setAuth] = useContext(AuthContext);
+  const { name, avatar, venueManager, accessToken } = auth || getLocalStorage('user');
   const navigate = useNavigate();
   const [avatarURL, setAvatarURL] = useState('');
   const { data, isLoading, errorMsg, isError, fetchData } = useApi(accessToken);
+  const { data: roleData, isLoading: isUpdatingRole, isError: isRoleError, errorMsg: roleErrorMsg, created: roleUpdated, fetchData: updateRole } = useApi();
   const [isFormError, setIsFormError] = useState(false);
   const avatarErrorRef = useRef(null);
   const avatarSubmitButtonRef = useRef(null);
-  const [isVenueManager, setIsVenueManager] = useState(false);
+  const [isVenueManager, setIsVenueManager] = useState(venueManager);
   const {
     register,
     handleSubmit,
@@ -62,7 +65,8 @@ function Profile() {
   };
 
   const handleFormSubmit = (data) => {
-    fetchData(`${API_PROFILE}/${name}/media`, 'PUT', data);
+    // Ensure we send the access token for auth and the avatar payload as the body
+    fetchData(`${API_PROFILE}/${name}/media`, 'PUT', accessToken, data);
   };
 
   useProfile(navigate, setAuth, isError, setIsFormError, avatarErrorRef, avatarSubmitButtonRef, accessToken, data);
@@ -71,14 +75,20 @@ function Profile() {
     document.title = 'Holidaze | Profile';
   }, []);
 
-  function handleVenueManager(e) {
-    setIsVenueManager(e.target.checked);
-    if (e.target.checked) {
-      // Call the API to update the venue manager status
-      fetchData(`${API_PROFILE}/${name}`, 'PUT', { venueManager: true });
-    } else {
-      fetchData(`${API_PROFILE}/${name}`, 'PUT', { venueManager: false });
+  // Sync updated role back to auth and localStorage when API responds
+  useEffect(() => {
+    if (typeof roleData?.venueManager === 'boolean') {
+      const baseUser = auth || getLocalStorage('user');
+      const updatedUser = { ...baseUser, venueManager: roleData.venueManager };
+      setAuth(updatedUser);
+      localStorage.setItem('user', JSON.stringify(updatedUser));
     }
+  }, [roleData, setAuth, auth]);
+
+  function handleVenueManager(e) {
+    const checked = e.target.checked;
+    setIsVenueManager(checked);
+    updateRole(`${API_PROFILE}/${name}`, 'PUT', accessToken, { venueManager: checked });
   }
 
   return (
@@ -97,11 +107,26 @@ function Profile() {
                 />
                 <h3 className={'text-center text-xl font-bold mt-8 overflow-hidden'}>{name}</h3>
                 <h4 className={'text-center text-xl font-light italic mt-4'}>
-                  {venueManager ? 'Venue Manager' : 'Customer'}
+                  {isVenueManager ? 'Venue Manager' : 'Customer'}
                 </h4>
+                <div className={'mt-4 flex items-center gap-2 justify-center'}>
+                  <input
+                    id={'toggle-venue-manager'}
+                    type={'checkbox'}
+                    checked={!!isVenueManager}
+                    onChange={handleVenueManager}
+                    disabled={isUpdatingRole}
+                  />
+                  <label htmlFor={'toggle-venue-manager'} className={'select-none'}>
+                    I am a Venue manager
+                  </label>
+                </div>
+                {isRoleError && (
+                  <p className={'text-red-700 mt-2 text-center'}>
+                    {roleErrorMsg || 'Failed to update role. Please try again.'}
+                  </p>
+                )}
                 <div id={'avatar-update'} className={'mt-12'}>
-
-
                   <form onSubmit={handleSubmit(handleFormSubmit)} onBlur={() => setIsFormError(false)}>
                     <label className={'block font-bold mb-4'} htmlFor={'avatar'}>
                       Update avatar
@@ -140,6 +165,9 @@ function Profile() {
               </div>
             </div>
 
+            <div className={'flex-1'}>
+              {venueManager ? <ProfileVenueManager /> : <UpcomingBookings />}
+            </div>
           </div>
         </div>
       </section>
