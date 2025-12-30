@@ -5,7 +5,7 @@
  * @return {any} The value of the item if it exists in local storage, otherwise an empty array.
  */
 function getLocalStorage(key) {
-    return localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : [];
+  return localStorage.getItem(key) ? JSON.parse(localStorage.getItem(key)) : [];
 }
 
 export { getLocalStorage };
