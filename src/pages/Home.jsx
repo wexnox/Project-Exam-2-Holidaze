@@ -1,9 +1,10 @@
 import React, { useEffect, useContext, useMemo, useState } from 'react';
-import { API_VENUES } from '../js/constants.js';
-import VenueListItem from '../components/VenueListItem.jsx';
-import { getValidVenues } from '../js/validation.js';
-import { SettingsContext } from '../components/context/SettingsContext.js';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { SettingsContext } from '../components/context/SettingsContext.js';
+import VenueListItem from '../components/VenueListItem.jsx';
+import { API_VENUES } from '../js/constants.js';
+import { getValidVenues } from '../js/validation.js';
 
 // TODO: Break it up more in to each file or code block
 
@@ -12,7 +13,10 @@ const Hero = ({ data, isLoading }) => {
   const [query, setQuery] = useState('');
   const heroImages = useMemo(() => {
     const list = getValidVenues(data || []);
-    return list.slice(0, 6).map(v => v.media?.[0]).filter(Boolean);
+    return list
+      .slice(0, 6)
+      .map((v) => v.media?.[0])
+      .filter(Boolean);
   }, [data]);
 
   function onSearch(e) {
@@ -30,7 +34,9 @@ const Hero = ({ data, isLoading }) => {
           <div className={'relative py-16 px-6 text-white'}>
             <div className={'sm:m-auto w-full max-w-2xl text-center'}>
               <h1 className={'text-4xl font-bold mb-3'}>Welcome to Holidaze</h1>
-              <p className={'mt-2 text-base opacity-95'}>Discover stunning venues around the world. Book your dream stay or list your own.</p>
+              <p className={'mt-2 text-base opacity-95'}>
+                Discover stunning venues around the world. Book your dream stay or list your own.
+              </p>
 
               <form onSubmit={onSearch} className={'mt-6 flex gap-2 justify-center'}>
                 <input
@@ -41,7 +47,10 @@ const Hero = ({ data, isLoading }) => {
                   placeholder={'Search by name, city, country...'}
                   type={'search'}
                 />
-                <button type={'submit'} className={'h-11 px-5 rounded-md bg-rose-700 hover:bg-rose-600 text-white'}>
+                <button
+                  type={'submit'}
+                  className={'h-11 px-5 rounded-md bg-rose-700 hover:bg-rose-600 text-white'}
+                >
                   Search
                 </button>
               </form>
@@ -50,7 +59,13 @@ const Hero = ({ data, isLoading }) => {
             {!isLoading && heroImages.length > 0 && (
               <div className={'mt-10 grid grid-cols-3 sm:grid-cols-6 gap-2 opacity-95'}>
                 {heroImages.map((src, i) => (
-                  <img key={i} src={src} alt={'Venue preview'} className={'h-24 w-full object-cover rounded-md'} loading={'lazy'} />
+                  <img
+                    key={i}
+                    src={src}
+                    alt={'Venue preview'}
+                    className={'h-24 w-full object-cover rounded-md'}
+                    loading={'lazy'}
+                  />
                 ))}
               </div>
             )}
@@ -76,7 +91,10 @@ const FeaturedVenues = ({ data }) => {
     if (!img || !visible) return null;
 
     return (
-      <Link to={`/venues/venue-details/${v.id}`} className={'rounded-2xl overflow-hidden border shadow-sm block'}>
+      <Link
+        to={`/venues/venue-details/${v.id}`}
+        className={'rounded-2xl overflow-hidden border shadow-sm block'}
+      >
         <img
           src={img}
           alt={`${v.name} image`}
@@ -142,8 +160,8 @@ const ErrorMessage = () => (
 const VenueList = ({ data }) => {
   return data && data.length > 0
     ? getValidVenues(data)
-      .slice(0, 12)
-      .map((venue) => <VenueListItem key={venue.id} {...venue} />)
+        .slice(0, 12)
+        .map((venue) => <VenueListItem key={venue.id} {...venue} />)
     : null;
 };
 

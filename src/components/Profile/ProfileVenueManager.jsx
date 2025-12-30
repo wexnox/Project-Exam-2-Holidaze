@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { handleImageError, smoothScrollToElement } from '../../js/validation.js';
-import venueSchema from '../../js/schemas/venueSchema.js';
-import { API_PROFILE, API_VENUES as EDIT_DELETE_VENUE } from '../../js/constants.js';
-
-import { useApi } from '../../js/api.js';
-import { getLocalStorage } from '../../js/storage.mjs';
-import { format, parseISO } from 'date-fns';
-import CreateVenueForm from '../../components/venues/CreateVenueForm.jsx';
-import { useFieldArray, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { format, parseISO } from 'date-fns';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+
 import UpcomingBookings from './UpcomingBookings.jsx';
+import CreateVenueForm from '../../components/venues/CreateVenueForm.jsx';
+import { useApi } from '../../js/api.js';
+import { API_PROFILE, API_VENUES as EDIT_DELETE_VENUE } from '../../js/constants.js';
+import venueSchema from '../../js/schemas/venueSchema.js';
+import { getLocalStorage } from '../../js/storage.mjs';
+import { handleImageError, smoothScrollToElement } from '../../js/validation.js';
 import { SettingsContext } from '../context/SettingsContext.js';
 
 function ProfileVenueManager() {

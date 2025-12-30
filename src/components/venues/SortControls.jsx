@@ -36,30 +36,46 @@ export default function SortControls({ sort, setSort, sortOrder, setSortOrder, c
   return (
     <div className={`mb-8 flex justify-end ${className}`}>
       <span className="block text-xs text-slate-600 font-semi bold sm:inline sm:text-sm">
-        <SortButton aria-label="Sort venues by date" setActive={setSort}
-                    active={sort !== null ? sort : false}>
+        <SortButton
+          aria-label="Sort venues by date"
+          setActive={setSort}
+          active={sort !== null ? sort : false}
+        >
           <div className="flex items-center">
-            <FaArrowDownWideShort className="mr-1" />Created
+            <FaArrowDownWideShort className="mr-1" />
+            Created
           </div>
         </SortButton>
-        <SortButton aria-label="Sort venues by name" setActive={setSort}
-                    active={sort !== null ? !sort : true}>
+        <SortButton
+          aria-label="Sort venues by name"
+          setActive={setSort}
+          active={sort !== null ? !sort : true}
+        >
           <div className="flex items-center">
-            <FaArrowUpShortWide className="mr-1" />Name
+            <FaArrowUpShortWide className="mr-1" />
+            Name
           </div>
         </SortButton>
 
         <span className="text-gray-900 mr-4">|</span>
-        <SortButton aria-label="Sort venues descending" setActive={setSortOrder}
-                    active={sortOrder !== null ? sortOrder : false}>
+        <SortButton
+          aria-label="Sort venues descending"
+          setActive={setSortOrder}
+          active={sortOrder !== null ? sortOrder : false}
+        >
           <div className="flex items-center">
-            <FaArrowDownWideShort className="mr-1" />Descending
+            <FaArrowDownWideShort className="mr-1" />
+            Descending
           </div>
         </SortButton>
-        <SortButton aria-label="Sort venues ascending" setActive={setSortOrder}
-                    active={sortOrder !== null ? !sortOrder : true}>
+        <SortButton
+          aria-label="Sort venues ascending"
+          setActive={setSortOrder}
+          active={sortOrder !== null ? !sortOrder : true}
+        >
           <div className="flex items-center ">
-            <FaArrowUpShortWide className="mr-1" />Ascending
+            <FaArrowUpShortWide className="mr-1" />
+            Ascending
           </div>
         </SortButton>
       </span>

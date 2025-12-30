@@ -1,9 +1,10 @@
+import React, { useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { SettingsContext } from './context/SettingsContext.js';
 import VenueListItem from './VenueListItem.jsx';
 import { API_VENUES } from '../js/constants.js';
-import React, { useContext, useEffect } from 'react';
 import { getValidVenues } from '../js/validation.js';
-import { SettingsContext } from './context/SettingsContext.js';
 
 function normalize(val) {
   return typeof val === 'string' ? val.toLowerCase() : '';
@@ -26,18 +27,17 @@ function isSearchMatch(item, searchValue) {
 }
 
 function getSearchResults(data, searchValue) {
-  return data && data.length > 0
-    ? data.filter(item => isSearchMatch(item, searchValue))
-    : [];
+  return data && data.length > 0 ? data.filter((item) => isSearchMatch(item, searchValue)) : [];
 }
 
 function SearchResultsDisplay({ searchResults }) {
   return (
-    <div id={'venues-container'}
-         className="flex flex-col gap-14 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 md:grid-cols-3 lg:grid-cols-4">
-      {searchResults.length > 0 && getValidVenues(searchResults).map((venue) => (
-        <VenueListItem key={venue.id} {...venue} />
-      ))}
+    <div
+      id={'venues-container'}
+      className="flex flex-col gap-14 sm:grid sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 md:grid-cols-3 lg:grid-cols-4"
+    >
+      {searchResults.length > 0 &&
+        getValidVenues(searchResults).map((venue) => <VenueListItem key={venue.id} {...venue} />)}
     </div>
   );
 }

@@ -18,7 +18,10 @@ export default function RatingStars({ rating, size = 14, className = '' }) {
   const empty = 5 - full - (hasHalf ? 1 : 0);
 
   return (
-    <div className={`inline-flex items-center gap-1 ${className}`} aria-label={`Rating: ${value.toFixed(1)} out of 5`}>
+    <div
+      className={`inline-flex items-center gap-1 ${className}`}
+      aria-label={`Rating: ${value.toFixed(1)} out of 5`}
+    >
       <div className="flex items-center" aria-hidden>
         {Array.from({ length: full }).map((_, i) => (
           <FaStar key={`full-${i}`} size={size} className="text-amber-400" />

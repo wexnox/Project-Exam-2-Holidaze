@@ -1,10 +1,11 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import axios from 'axios';
-import { API_LOGIN } from '../js/constants.js';
 import { useNavigate } from 'react-router-dom';
+import * as yup from 'yup';
+
+import { API_LOGIN } from '../js/constants.js';
 import { AuthContext } from './context/AuthContext.js';
 
 const schema = yup.object().shape({
@@ -16,19 +17,22 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .min(8, 'Password must be at least 8 characters')
-    .required('Password is required')
+    .required('Password is required'),
 });
 
 const Login = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors }, setError } = useForm({
-    resolver: yupResolver(schema)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm({
+    resolver: yupResolver(schema),
   });
   const [, setAuth] = useContext(AuthContext);
 
-
   const [serverError, setServerError] = useState('');
-
 
   const onSubmit = async (data) => {
     try {
@@ -44,7 +48,7 @@ const Login = () => {
     } catch (e) {
       setError('server', {
         type: 'server',
-        message: 'Login failed. Please check your login details or your network connection.'
+        message: 'Login failed. Please check your login details or your network connection.',
       });
     }
   };

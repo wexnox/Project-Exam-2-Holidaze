@@ -1,9 +1,10 @@
+import { format, parseISO } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import { API_PROFILE } from '../../js/constants.js';
 import { getLocalStorage } from '../../js/storage.mjs';
 import { handleImageError } from '../../js/validation.js';
-import { format, parseISO } from 'date-fns';
-import { Link } from 'react-router-dom';
 import { SettingsContext } from '../context/SettingsContext.js';
 
 function ProfileCustomer() {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useApi } from '../../js/api.js';
+
 import { SettingsContext } from './SettingsContext.js';
+import { useApi } from '../../js/api.js';
 
 export function SettingsProvider({ children }) {
   const { data, isLoading, isError, fetchData, created } = useApi();
@@ -19,12 +20,8 @@ export function SettingsProvider({ children }) {
     sort,
     setSort,
     sortOrder,
-    setSortOrder
+    setSortOrder,
   };
 
-  return (
-    <SettingsContext.Provider value={contextData}>
-      {children}
-    </SettingsContext.Provider>
-  );
+  return <SettingsContext.Provider value={contextData}>{children}</SettingsContext.Provider>;
 }

@@ -1,15 +1,16 @@
-import React, { useContext, useRef, useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { getLocalStorage } from '../../js/storage.mjs';
-import { useApi } from '../../js/api.js';
-import { getValidationImageSchema, smoothScrollToElement } from '../../js/validation.js';
-import { API_PROFILE } from '../../js/constants.js';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AuthContext } from '../context/AuthContext.js';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import profileImg from '../../assets/placeholder-image.svg';
-import UpcomingBookings from './UpcomingBookings.jsx';
+
 import ProfileVenueManager from './ProfileVenueManager.jsx';
+import UpcomingBookings from './UpcomingBookings.jsx';
+import profileImg from '../../assets/placeholder-image.svg';
+import { useApi } from '../../js/api.js';
+import { API_PROFILE } from '../../js/constants.js';
+import { getLocalStorage } from '../../js/storage.mjs';
+import { getValidationImageSchema, smoothScrollToElement } from '../../js/validation.js';
+import { AuthContext } from '../context/AuthContext.js';
 
 const useProfile = (
   navigate,

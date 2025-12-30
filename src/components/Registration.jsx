@@ -1,13 +1,13 @@
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
-import { API_REGISTER } from '../js/constants.js';
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { AuthContext } from './context/AuthContext.js';
-import { useApi } from '../js/api.js';
-import { getValidationSchema } from '../js/validation.js';
 
+import { useApi } from '../js/api.js';
+import { API_REGISTER } from '../js/constants.js';
+import { getValidationSchema } from '../js/validation.js';
+import { AuthContext } from './context/AuthContext.js';
 
 function Register() {
   const [auth, setAuth] = useContext(AuthContext);
@@ -18,9 +18,9 @@ function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
-    resolver: yupResolver(getValidationSchema)
+    resolver: yupResolver(getValidationSchema),
   });
 
   const [serverError, setServerError] = useState('');
@@ -28,27 +28,21 @@ function Register() {
 
   const onSubmit = async (data) => {
     try {
-
       // Include venueManager flag from checkbox in the payload
       const payload = { ...data, venueManager: isVenueManager };
       const response = await axios.post(API_REGISTER, payload);
 
       // Store full user object and set auth context
       if (response.data) {
-
         setAuth(response.data);
 
         localStorage.setItem('user', JSON.stringify(response.data));
 
         navigate('/profile');
-
       } else {
-
         throw new Error('Invalid response received.');
-
       }
     } catch (error) {
-
       // Gracefully handle server validation errors
 
       if (error?.response?.data?.errors) {
@@ -78,34 +72,54 @@ function Register() {
           <label htmlFor="name" className="block mb-1">
             Name
           </label>
-          <input id="name" type="text"
-                 className="w-full p-2 border border-gray-300 rounded" {...register('name')} />
-          <p className="text-xs text-gray-500 mt-1">Allowed: letters, numbers, and underscore (_). No spaces or other symbols.</p>
+          <input
+            id="name"
+            type="text"
+            className="w-full p-2 border border-gray-300 rounded"
+            {...register('name')}
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Allowed: letters, numbers, and underscore (_). No spaces or other symbols.
+          </p>
           {errors.name && <p className="text-red-500">{errors.name.message}</p>}
         </div>
         <div className="mb-4">
           <label htmlFor="email" className="block mb-1">
             Email
           </label>
-          <input id="email" type="email"
-                 className="w-full p-2 border border-gray-300 rounded" {...register('email')} />
+          <input
+            id="email"
+            type="email"
+            className="w-full p-2 border border-gray-300 rounded"
+            {...register('email')}
+          />
           {errors.email && <p className="text-red-500">{errors.email.message}</p>}
         </div>
         <div className="mb-4">
           <label htmlFor="password" className="block mb-1">
             Password
           </label>
-          <input id="password" type="password"
-                 className="w-full p-2 border border-gray-300 rounded" {...register('password')} />
+          <input
+            id="password"
+            type="password"
+            className="w-full p-2 border border-gray-300 rounded"
+            {...register('password')}
+          />
           {errors.password && <p className="text-red-500">{errors.password.message}</p>}
         </div>
         <div className="mb-4">
           <label htmlFor="confirmPassword" className="block mb-1">
             Confirm Password
           </label>
-          <input id="confirmPassword" type="password"
-                 className="w-full p-2 border border-gray-300 rounded" {...register('confirmPassword')} />
-          {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
+          <input
+            id="confirmPassword"
+            type="password"
+            className="w-full p-2 border border-gray-300 rounded"
+            {...register('confirmPassword')}
+          />
+          {errors.confirmPassword && (
+            <p className="text-red-500">{errors.confirmPassword.message}</p>
+          )}
         </div>
         <div className={'flex items-center gap-2 mt-3'}>
           <label htmlFor={'venue-manager'} className={'select-none'}>
@@ -120,6 +134,6 @@ function Register() {
       </form>
     </div>
   );
-};
+}
 
 export default Register;

@@ -1,33 +1,27 @@
-import { getLocalStorage } from '../../js/storage.mjs';
+import { yupResolver } from '@hookform/resolvers/yup';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+
+import CreateVenueForm from './CreateVenueForm.jsx';
 import { useApi } from '../../js/api.js';
 import { API_VENUES } from '../../js/constants.js';
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { venueSchema } from '../../js/schemas/venueSchema.js';
+import { getLocalStorage } from '../../js/storage.mjs';
 import { smoothScrollToElement } from '../../js/validation.js';
 import { SettingsContext } from '../context/SettingsContext.js';
-import CreateVenueForm from './CreateVenueForm.jsx';
-import { venueSchema } from '../../js/schemas/venueSchema.js';
 
 function CreateVenue() {
   const { venueManager, accessToken } = getLocalStorage('user');
   const navigate = useNavigate();
-  const {
-    data,
-    created,
-    isLoading,
-    isError: isErrorBooking,
-    errorMsg,
-    fetchData
-  } = useApi();
+  const { data, created, isLoading, isError: isErrorBooking, errorMsg, fetchData } = useApi();
   const { setIsVenueSectionActive } = useContext(SettingsContext);
   const submitBookingRef = useRef(null);
   const [isFormError, setIsFormError] = useState(false);
   const bookingErrorRef = useRef(null);
 
   const createForm = useForm({
-    resolver: yupResolver(venueSchema)
+    resolver: yupResolver(venueSchema),
   });
 
   const { control } = createForm;
@@ -62,7 +56,7 @@ function CreateVenue() {
   const [locationString, setLocationString] = useState('');
   const mediaArray = useFieldArray({
     control,
-    name: 'media'
+    name: 'media',
   });
   const [mediaURL, setMediaURL] = useState('');
 

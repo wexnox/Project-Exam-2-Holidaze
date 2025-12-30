@@ -1,21 +1,25 @@
-import React, { useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
+import { useForm, Controller } from 'react-hook-form';
+import * as yup from 'yup';
 
 const validationSchema = yup.object().shape({
   name: yup.string().required(),
   email: yup.string().email().required(),
-  message: yup.string().required()
+  message: yup.string().required(),
 });
 
 function useContactForm() {
-  const { handleSubmit, control, formState: { errors } } = useForm({
-    resolver: yupResolver(validationSchema)
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = data => console.log(data);
+  const onSubmit = (data) => console.log(data);
 
   return { handleSubmit, control, errors, onSubmit };
 }
@@ -25,8 +29,6 @@ function ErrorMessage({ error }) {
 }
 
 export default function Contact() {
-
-
   const { handleSubmit, control, errors, onSubmit } = useContactForm();
 
   return (
@@ -37,8 +39,13 @@ export default function Contact() {
       <section className="text-gray-600 body-font relative">
         <div className="container px-5 py-24 mx-auto">
           <div className="flex flex-col text-center w-full mb-12">
-            <h1 className="text-2xl font-medium title-font mb-4 text-gray-900 tracking-widest">CONTACT US</h1>
-            <p className="lg:w-2/3 mx-auto leading-relaxed text-base">We would love to hear your feedback.</p>
+            <h1 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 tracking-tight">
+              Contact Holidaze
+            </h1>
+            <p className="lg:w-2/3 mx-auto leading-relaxed text-base md:text-lg text-gray-700">
+              Questions, feedback, or partnership ideas? Our team is here to help. Fill out the form
+              and we’ll get back to you as soon as possible.
+            </p>
           </div>
           <form onSubmit={handleSubmit(onSubmit)} className="lg:w-1/2 md:w-2/3 mx-auto">
             <div className="flex flex-wrap -m-2">
@@ -46,57 +53,89 @@ export default function Contact() {
                 name="name"
                 control={control}
                 defaultValue=""
-                render={({ field }) =>
+                render={({ field }) => (
                   <div className="p-2 w-1/2">
                     <div className="relative">
-                      <label htmlFor="name" className="leading-7 text-sm text-gray-600">Name</label>
-                      <input type="text" id="name" {...field}
-                             className={`w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.name ? 'border-red-500' : ''}`} />
+                      <label htmlFor="name" className="leading-7 text-sm text-gray-600">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        {...field}
+                        className={`w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.name ? 'border-red-500' : ''}`}
+                      />
                       <ErrorMessage error={errors.name} />
                     </div>
-                  </div>}
+                  </div>
+                )}
               />
 
               <Controller
                 name="email"
                 control={control}
                 defaultValue=""
-                render={({ field }) =>
+                render={({ field }) => (
                   <div className="p-2 w-1/2">
                     <div className="relative">
-                      <label htmlFor="email" className="leading-7 text-sm text-gray-600">Email</label>
-                      <input type="email" id="email" {...field}
-                             className={`w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.email ? 'border-red-500' : ''}`} />
+                      <label htmlFor="email" className="leading-7 text-sm text-gray-600">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        {...field}
+                        className={`w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.email ? 'border-red-500' : ''}`}
+                      />
                       <ErrorMessage error={errors.email} />
                     </div>
-                  </div>}
+                  </div>
+                )}
               />
 
               <Controller
                 name="message"
                 control={control}
                 defaultValue=""
-                render={({ field }) =>
+                render={({ field }) => (
                   <div className="p-2 w-full">
                     <div className="relative">
-                      <label htmlFor="message"
-                             className="leading-7 text-sm text-gray-600">Message</label>
-                      <textarea id="message" {...field} rows="4"
-                                className={`w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.message ? 'border-red-500' : ''}`} />
+                      <label htmlFor="message" className="leading-7 text-sm text-gray-600">
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        {...field}
+                        rows="4"
+                        className={`w-full bg-white rounded border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${errors.message ? 'border-red-500' : ''}`}
+                      />
                       <ErrorMessage error={errors.message} />
                     </div>
-                  </div>}
+                  </div>
+                )}
               />
 
               <div className="p-2 w-full">
-                <button type="submit"
-                        className="flex mx-auto text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg">
+                <button
+                  type="submit"
+                  className="flex mx-auto text-white bg-blue-500 border-0 py-2 px-8 focus:outline-none hover:bg-blue-600 rounded text-lg"
+                >
                   Submit
                 </button>
               </div>
-
             </div>
           </form>
+
+          <div className="lg:w-1/2 md:w-2/3 mx-auto mt-10 text-center text-gray-700">
+            <p className="text-base md:text-lg">
+              Prefer email? Reach us at
+              <a href="mailto:support@holidaze.app" className="text-blue-600 hover:underline ml-1">
+                support@holidaze.app
+              </a>
+            </p>
+            <p className="mt-2 text-sm">Average response time: under 24 hours</p>
+            <p className="mt-1 text-sm">Support hours: Mon–Fri 08:00–18:00 (CET)</p>
+          </div>
         </div>
       </section>
     </>
