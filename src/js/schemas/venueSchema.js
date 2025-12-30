@@ -19,7 +19,7 @@ export const venueSchema = yup.object({
 
   location: yup
     .object({
-      address: yup.string().required('Address is required')
+      address: yup.string().required('Address is required'),
     })
     .required('Location is required')
     .nullable()
@@ -37,7 +37,7 @@ export const venueSchema = yup.object({
     .min(1, 'Max guests must be at least 1')
     .max(100, 'Max guests can not exceed 100'),
 
-  media: yup.array().min(1, 'Image URL must have at least one image')
+  media: yup.array().min(1, 'Image URL must have at least one image'),
 });
 
 export default venueSchema;
