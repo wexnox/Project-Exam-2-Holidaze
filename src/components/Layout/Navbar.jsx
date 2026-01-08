@@ -201,13 +201,6 @@ function Navbar() {
                   </div>
                 )}
               </label>
-              <button
-                onClick={handleSearch}
-                aria-label={'Submit search'}
-                className={'px-3 rounded hover:bg-blue-200 hover:text-white ease-out duration-200'}
-              >
-                Search
-              </button>
             </div>
           </div>
         </div>

@@ -7,9 +7,12 @@ export default {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
   },
   transform: {
-    '^.+\\.(js|jsx)$': [
+    '^.+\\.(js|jsx|mjs)$': [
       'babel-jest',
-      { presets: ['@babel/preset-env', ['@babel/preset-react', { runtime: 'automatic' }]] },
+      {
+        presets: ['@babel/preset-env', ['@babel/preset-react', { runtime: 'automatic' }]],
+        plugins: ['babel-plugin-transform-vite-meta-env'],
+      },
     ],
   },
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],

@@ -1,28 +1,28 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { HelmetProvider } from 'react-helmet-async';
+import { MemoryRouter } from 'react-router-dom';
 
-// Try to render the root component if available, otherwise just assert test infra works
-let App;
-try {
-  // Common entry points
-  App = (await import('../App.jsx')).default;
-} catch (e) {
-  App = null;
-}
+import App from '../App.jsx';
+import AuthProvider from '../components/context/AuthProvider.jsx';
+import { SettingsProvider } from '../components/context/SettingsProvider.jsx';
 
 describe('Smoke', () => {
   test('testing framework is wired', () => {
     expect(true).toBe(true);
   });
 
-  test('can render app without crashing (if App exists)', () => {
-    if (!App) {
-      // If App.jsx isn't present, just skip
-      return;
-    }
-    render(<App />);
-    // App-specific assertions can be added later; just verify render didn't throw
-    expect(document.getElementById('root')).toBeInTheDocument();
+  test('can render app without crashing', () => {
+    render(
+      <HelmetProvider>
+        <AuthProvider>
+          <MemoryRouter>
+            <SettingsProvider>
+              <App />
+            </SettingsProvider>
+          </MemoryRouter>
+        </AuthProvider>
+      </HelmetProvider>,
+    );
   });
 });
